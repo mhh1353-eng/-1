@@ -2,7 +2,7 @@
   "name": "رستوران شقایق",
   "short_name": "شقایق",
   "description": "سیستم مدیریت رستوران",
-  "start_url": "/",
+  "start_url": "/-1/",
   "display": "standalone",
   "background_color": "#FFF8E1",
   "theme_color": "#5D4037",
@@ -35,4 +35,5 @@
       "description": "گزارش عملکرد روزانه"
     }
   ]
+
 }
