@@ -1,0 +1,2093 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سیستم مدیریت رستوران شقایق</title>
+    
+    <!-- PWA Configuration -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#5D4037">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="رستوران شقایق">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="icon" href="icon-192.png" type="image/png">
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazir-font@30.1.0/dist/font-face.css">
+    <style>
+        * {
+            font-family: 'Vazir', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            direction: rtl;
+        }
+
+        body {
+            background-color: #FFF8E1;
+            color: #5D4037;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 80px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #5D4037 0%, #3E2723 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(93, 64, 55, 0.3);
+        }
+
+        .header h1 {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-right: 5px solid #D4A574;
+        }
+
+        .card-title {
+            color: #5D4037;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #D4A574;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #D4A574 0%, #FFD54F 100%);
+            color: #5D4037;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #A37548 0%, #D4A574 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(212, 165, 116, 0.4);
+        }
+
+        .btn-secondary {
+            background: #5D4037;
+            color: white;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            width: auto;
+            margin: 0;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #5D4037;
+            font-weight: bold;
+        }
+
+        select, input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #D4A574;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: #FFF8E1;
+            color: #5D4037;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: #5D4037;
+            box-shadow: 0 0 0 3px rgba(93, 64, 55, 0.2);
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+            border-top: 3px solid #D4A574;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #5D4037;
+            font-size: 0.8rem;
+            text-decoration: none;
+        }
+
+        .nav-item.active {
+            background: #FFF8E1;
+            color: #A37548;
+            font-weight: bold;
+        }
+
+        .nav-item i {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .nav-item:hover {
+            background: #FFF8E1;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .item-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #D4A574;
+            border-radius: 10px;
+            padding: 10px;
+            background: #FFF8E1;
+        }
+
+        .item-option {
+            padding: 10px;
+            border-bottom: 1px solid #D4A574;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .item-option:hover {
+            background: white;
+        }
+
+        .item-option:last-child {
+            border-bottom: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            max-width: 90%;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+
+        .message-preview {
+            background: #FFF8E1;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border: 1px dashed #D4A574;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .persian-date {
+            text-align: center;
+            padding: 10px;
+            background: #5D4037;
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .search-box {
+            margin-bottom: 10px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #D4A574;
+            border-radius: 8px;
+        }
+
+        .list-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .list-actions .btn {
+            flex: 1;
+            padding: 8px;
+            font-size: 0.9rem;
+        }
+
+        .customer-balance {
+            background: #E8F5E9;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            text-align: center;
+            font-weight: bold;
+            color: #2E7D32;
+        }
+
+        .selected-items-container {
+            margin-top: 15px;
+            padding: 15px;
+            border: 2px dashed #D4A574;
+            border-radius: 10px;
+            background: #FFF8E1;
+        }
+
+        .selected-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #D4A574;
+        }
+
+        .selected-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .item-details {
+            flex-grow: 1;
+        }
+
+        .item-name {
+            font-weight: bold;
+            color: #5D4037;
+            margin-bottom: 5px;
+        }
+
+        .item-quantity {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .item-price {
+            color: #2E7D32;
+            font-weight: bold;
+        }
+
+        .remove-item {
+            color: #F44336;
+            cursor: pointer;
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .multi-item-form {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            border: 1px solid #D4A574;
+            border-radius: 10px;
+            background: #FFF8E1;
+        }
+
+        .multi-item-form.active {
+            display: block;
+        }
+
+        .add-item-btn {
+            background: #5D4037;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .selected-items-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .clear-all-btn {
+            background: #F44336;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        .tab-switcher {
+            display: flex;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #D4A574;
+        }
+
+        .tab-switch {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab-switch.active {
+            border-bottom: 3px solid #D4A574;
+            font-weight: bold;
+            color: #5D4037;
+        }
+
+        .tab-switch:hover {
+            background: #FFF8E1;
+        }
+
+        .inventory-tabs {
+            display: none;
+        }
+
+        .inventory-tabs.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏢 رستوران شقایق</h1>
+        <div class="persian-date" id="currentDate"></div>
+    </div>
+
+    <div id="inventoryTab" class="tab-content active">
+        <div class="card">
+            <div class="card-title">📦 ثبت ورود/خروج انبار</div>
+            
+            <div class="tab-switcher">
+                <div class="tab-switch active" onclick="switchInventoryMode('single')">تک کالا</div>
+                <div class="tab-switch" onclick="switchInventoryMode('multi')">چند کالا</div>
+            </div>
+            
+            <!-- حالت تک کالایی -->
+            <div id="singleItemTab" class="inventory-tabs active">
+                <div class="form-group">
+                    <label>نوع عملیات:</label>
+                    <select id="inventoryType">
+                        <option value="in">✅ ورود کالا</option>
+                        <option value="out">🔻 خروج کالا</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>انتخاب کالا:</label>
+                    <input type="text" id="itemSearch" placeholder="جستجوی کالا..." class="search-box">
+                    <div class="item-list" id="itemList"></div>
+                </div>
+                <div class="form-group">
+                    <label>مقدار:</label>
+                    <input type="number" id="quantity" placeholder="مثال: 5" min="1">
+                </div>
+                <div class="form-group">
+                    <label>قیمت واحد (ریال):</label>
+                    <input type="number" id="price" placeholder="فقط برای ورود" min="0">
+                </div>
+                <div class="form-group">
+                    <label>توضیحات:</label>
+                    <textarea id="inventoryDesc" rows="2" placeholder="شماره فاکتور، توضیح خاص..."></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="createSingleInventoryCard()">ایجاد و ارسال کارت انبار</button>
+            </div>
+            
+            <!-- حالت چند کالایی -->
+            <div id="multiItemTab" class="inventory-tabs">
+                <div class="form-group">
+                    <label>نوع عملیات:</label>
+                    <select id="multiInventoryType">
+                        <option value="in">✅ ورود کالا</option>
+                        <option value="out">🔻 خروج کالا</option>
+                    </select>
+                </div>
+                
+                <div class="selected-items-container" id="multiSelectedItemsContainer" style="display: none;">
+                    <div class="selected-items-header">
+                        <h4>کالاهای انتخاب شده (<span id="selectedItemsCount">0</span>)</h4>
+                        <div class="clear-all-btn" onclick="clearAllSelectedItems()">حذف همه</div>
+                    </div>
+                    <div id="selectedItemsList"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label>افزودن کالا:</label>
+                    <input type="text" id="multiItemSearch" placeholder="جستجوی کالا..." class="search-box">
+                    <div class="item-list" id="multiItemList"></div>
+                </div>
+                
+                <div id="multiItemForm" class="multi-item-form">
+                    <div class="form-group">
+                        <label>مقدار:</label>
+                        <input type="number" id="multiQuantity" placeholder="مثال: 5" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>قیمت واحد (ریال):</label>
+                        <input type="number" id="multiPrice" placeholder="فقط برای ورود" min="0">
+                    </div>
+                    <button class="btn btn-small btn-primary" onclick="addToMultiItemsList()">افزودن به لیست</button>
+                </div>
+                
+                <div class="form-group">
+                    <label>توضیحات کلی:</label>
+                    <textarea id="multiInventoryDesc" rows="2" placeholder="شماره فاکتور، توضیح خاص..."></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="createMultiInventoryCard()">ایجاد و ارسال کارت چند کالایی</button>
+            </div>
+            
+            <div class="message-preview" id="inventoryPreview" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- سایر تب‌ها بدون تغییر باقی می‌مانند -->
+    <div id="personnelTab" class="tab-content">
+        <div class="card">
+            <div class="card-title">👥 پرداخت به پرسنل</div>
+            <div class="form-group">
+                <label>انتخاب پرسنل:</label>
+                <select id="employeeSelect"></select>
+            </div>
+            <div class="form-group">
+                <label>نوع پرداخت:</label>
+                <select id="paymentType">
+                    <option value="salary">💰 حقوق</option>
+                    <option value="advance">💸 مساعده</option>
+                    <option value="food">🍲 حق غذا</option>
+                    <option value="bonus">🎁 پاداش</option>
+                    <option value="other">📤 سایر</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>مبلغ (ریال):</label>
+                <input type="number" id="amount" placeholder="مبلغ را وارد کنید" min="1">
+            </div>
+            <div class="form-group">
+                <label>دوره (برای حقوق):</label>
+                <input type="text" id="period" placeholder="مثال: مهر ۱۴۰۳">
+            </div>
+            <div class="form-group">
+                <label>توضیحات:</label>
+                    <textarea id="personnelDesc" rows="2" placeholder="بابت اضافه‌کاری، غیبت..."></textarea>
+            </div>
+            <button class="btn btn-primary" onclick="createPersonnelCard()">ایجاد و ارسال کارت پرداخت</button>
+            <div class="message-preview" id="personnelPreview" style="display: none;"></div>
+        </div>
+    </div>
+
+    <div id="customersTab" class="tab-content">
+        <div class="card">
+            <div class="card-title">🤝 مشتریان دائمی</div>
+            <div class="form-group">
+                <label>انتخاب مشتری:</label>
+                <select id="customerSelect"></select>
+            </div>
+            <div class="form-group">
+                <label>نوع تراکنش:</label>
+                <select id="customerTransactionType">
+                    <option value="buy">🛒 خرید از مشتری</option>
+                    <option value="sell">💰 فروش به مشتری</option>
+                    <option value="payment">💳 پرداخت به مشتری</option>
+                    <option value="receive">💵 دریافت از مشتری</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>انتخاب کالا (برای خرید/فروش):</label>
+                <select id="customerItemSelect"></select>
+            </div>
+            <div class="form-group">
+                <label>مقدار:</label>
+                <input type="number" id="customerQuantity" placeholder="مقدار" min="0.01" step="0.01">
+            </div>
+            <div class="form-group">
+                <label>قیمت واحد (ریال):</label>
+                <input type="number" id="customerPrice" placeholder="قیمت واحد" min="0">
+            </div>
+            <div class="form-group">
+                <label>مبلغ نقدی (برای پرداخت/دریافت):</label>
+                <input type="number" id="customerCashAmount" placeholder="مبلغ نقدی" min="0">
+            </div>
+            <div class="form-group">
+                <label>توضیحات:</label>
+                <textarea id="customerDesc" rows="2" placeholder="توضیحات تراکنش..."></textarea>
+            </div>
+            <div id="customerBalanceDisplay" class="customer-balance" style="display: none;">
+                مانده حساب: <span id="customerBalance">0</span> ریال
+            </div>
+            <button class="btn btn-primary" onclick="createCustomerTransaction()">ثبت تراکنش</button>
+            <div class="message-preview" id="customerPreview" style="display: none;"></div>
+        </div>
+    </div>
+
+    <div id="expensesTab" class="tab-content">
+        <div class="card">
+            <div class="card-title">💸 ثبت هزینه متفرقه</div>
+            <div class="form-group">
+                <label>عنوان هزینه:</label>
+                <input type="text" id="expenseTitle" placeholder="مثال: قبض برق، کرایه حمل...">
+            </div>
+            <div class="form-group">
+                <label>مبلغ (ریال):</label>
+                <input type="number" id="expenseAmount" placeholder="مبلغ را وارد کنید" min="1">
+            </div>
+            <div class="form-group">
+                <label>توضیحات:</label>
+                <textarea id="expenseDesc" rows="2" placeholder="شماره قبض، توضیح اضافه..."></textarea>
+            </div>
+            <button class="btn btn-primary" onclick="createExpenseCard()">ایجاد و ارسال کارت هزینه</button>
+            <div class="message-preview" id="expensePreview" style="display: none;"></div>
+        </div>
+    </div>
+
+    <div id="reportTab" class="tab-content">
+        <div class="card">
+            <div class="card-title">📊 گزارش عملکرد روزانه</div>
+            <div style="text-align: center; padding: 20px;">
+                <p>با کلیک روی دکمه زیر، گزارش کامل امروز تولید و ارسال می‌شود.</p>
+                <button class="btn btn-secondary" onclick="createDailyReport()" style="width: 200px;">📨 ایجاد و ارسال گزارش روز</button>
+            </div>
+            <div class="message-preview" id="reportPreview" style="display: none;"></div>
+        </div>
+    </div>
+
+    <div id="settingsTab" class="tab-content">
+        <div class="card">
+            <div class="card-title">⚙️ مدیریت اطلاعات</div>
+            <div style="margin-bottom: 20px;">
+                <h4>📦 مدیریت کالاها</h4>
+                <input type="text" id="newItemName" placeholder="نام کالا" style="margin-bottom: 10px;">
+                <input type="text" id="newItemUnit" placeholder="واحد اندازه‌گیری" style="margin-bottom: 10px;">
+                <div class="list-actions">
+                    <button class="btn btn-primary" onclick="addItem()">➕ افزودن</button>
+                    <button class="btn btn-secondary" onclick="editItem()">✏️ ویرایش</button>
+                    <button class="btn" onclick="deleteItem()" style="background: #F44336; color: white;">🗑️ حذف</button>
+                </div>
+                <div class="item-list" id="itemsList" style="margin-top: 10px;"></div>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <h4>👥 مدیریت پرسنل</h4>
+                <input type="text" id="newEmployeeName" placeholder="نام پرسنل" style="margin-bottom: 10px;">
+                <div class="list-actions">
+                    <button class="btn btn-primary" onclick="addEmployee()">➕ افزودن</button>
+                    <button class="btn btn-secondary" onclick="editEmployee()">✏️ ویرایش</button>
+                    <button class="btn" onclick="deleteEmployee()" style="background: #F44336; color: white;">🗑️ حذف</button>
+                </div>
+                <div class="item-list" id="employeesList" style="margin-top: 10px;"></div>
+            </div>
+            
+            <div>
+                <h4>🤝 مدیریت مشتریان</h4>
+                <input type="text" id="newCustomerName" placeholder="نام مشتری" style="margin-bottom: 10px;">
+                <div class="list-actions">
+                    <button class="btn btn-primary" onclick="addCustomer()">➕ افزودن</button>
+                    <button class="btn btn-secondary" onclick="editCustomer()">✏️ ویرایش</button>
+                    <button class="btn" onclick="deleteCustomer()" style="background: #F44336; color: white;">🗑️ حذف</button>
+                </div>
+                <div class="item-list" id="customersList" style="margin-top: 10px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="#" class="nav-item active" onclick="showTab('inventoryTab')"><i class="material-icons">inventory</i>انبار</a>
+        <a href="#" class="nav-item" onclick="showTab('personnelTab')"><i class="material-icons">people</i>پرسنل</a>
+        <a href="#" class="nav-item" onclick="showTab('customersTab')"><i class="material-icons">handshake</i>مشتریان</a>
+        <a href="#" class="nav-item" onclick="showTab('expensesTab')"><i class="material-icons">receipt</i>هزینه‌ها</a>
+        <a href="#" class="nav-item" onclick="showTab('reportTab')"><i class="material-icons">assessment</i>گزارش</a>
+        <a href="#" class="nav-item" onclick="showTab('settingsTab')"><i class="material-icons">settings</i>تنظیمات</a>
+    </div>
+
+    <div class="modal" id="alertModal">
+        <div class="modal-content">
+            <h3 style="color: #5D4037; margin-bottom: 20px;" id="alertTitle"></h3>
+            <div id="alertMessage" style="margin-bottom: 20px;"></div>
+            <button class="btn btn-primary" onclick="closeAlert()">متوجه شدم</button>
+        </div>
+    </div>
+
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <h3 style="color: #5D4037; margin-bottom: 20px;">تأیید ارسال</h3>
+            <div id="confirmMessage" style="margin-bottom: 20px;"></div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-primary" onclick="sendConfirmedMessage()">✅ ارسال</button>
+                <button class="btn" onclick="closeModal()" style="background: #F44336; color: white;">❌ لغو</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const items = [
+            {id: 1, name: "ظرف تک پرسی آلومینیومی", unit: "کارتن"},
+            {id: 2, name: "ظرف کبابی دوخانه", unit: "کارتن"},
+            {id: 3, name: "ظرف کبابی آلومینیومی", unit: "کارتن"},
+            {id: 4, name: "ظرف سه پرسی آلومینیومی", unit: "کارتن"},
+            {id: 5, name: "ظرف زیتون", unit: "کارتن"},
+            {id: 6, name: "دیس کبابی چینی", unit: "کارتن"},
+            {id: 7, name: "بشقاب برنج", unit: "کارتن"},
+            {id: 8, name: "شکر", unit: "بسته"},
+            {id: 9, name: "ظرف گود اکبر جوجه", unit: "کارتن"},
+            {id: 10, name: "ظرف پنیر گردو", unit: "کارتن"},
+            {id: 11, name: "کاسه سوپ", unit: "کارتن"},
+            {id: 12, name: "کتری", unit: "عدد"},
+            {id: 13, name: "لیوان چای", unit: "کارتن"},
+            {id: 14, name: "بشقاب املت", unit: "کارتن"},
+            {id: 15, name: "قند ۳ کیلویی کاترین", unit: "گیلو"},
+            {id: 16, name: "سس فرانسوی تک", unit: "کارتن"},
+            {id: 17, name: "رب انار تک نفره", unit: "کارتن"},
+            {id: 18, name: "سس دبه ۱۰ کیلویی", unit: "دبه"},
+            {id: 19, name: "سس گلوریا", unit: "کارتن"},
+            {id: 20, name: "نمک پاش", unit: "کارتن"},
+            {id: 21, name: "مایع دودی", unit: "عدد"},
+            {id: 22, name: "سس شکلات", unit: "عدد"},
+            {id: 23, name: "نمک", unit: "بسته"},
+            {id: 24, name: "رب املت", unit: "کارتن"},
+            {id: 25, name: "رب محلی", unit: "دبه"},
+            {id: 26, name: "آبلیمو 1.5", unit: "بسته"},
+            {id: 27, name: "آبلیمو 1.250", unit: "عدد"},
+            {id: 28, name: "آب نارنج 1.5", unit: "عدد"},
+            {id: 29, name: "سرکه قزوین 9.5", unit: "عدد"},
+            {id: 30, name: "سرکه دست چین ۴", unit: "کارتن"},
+            {id: 31, name: "کیسه فریزر رولی", unit: "کارتن"},
+            {id: 32, name: "کیسه فریزر بسته‌بندی", unit: "کارتن"},
+            {id: 33, name: "روغن لادن ۱۶ کیلویی", unit: "عدد"},
+            {id: 34, name: "مایع دستشویی", unit: "عدد"},
+            {id: 35, name: "مایع ظرفشویی", unit: "عدد"},
+            {id: 36, name: "لیوان کاغذی", unit: "کارتن"},
+            {id: 37, name: "لیوان کاغذی کافه", unit: "کارتن"},
+            {id: 38, name: "لیوان پلاستیکی", unit: "بسته"},
+            {id: 39, name: "چاقو یکبار مصرف", unit: "کارتن"},
+            {id: 40, name: "چنگال یکبار مصرف", unit: "کارتن"},
+            {id: 41, name: "چاقو ام جی پلاست", unit: "کارتن"},
+            {id: 42, name: "قاشق کوچک", unit: "کارتن"},
+            {id: 43, name: "سفره", unit: "کارتن"},
+            {id: 44, name: "برنج خاطره 40 کیلو", unit: "کیسه"},
+            {id: 45, name: "عدس ۲۵ کیلویی", unit: "کیسه"},
+            {id: 46, name: "عدس ۵۰ کیلویی", unit: "کیسه"},
+            {id: 47, name: "جو پوست کنده", unit: "کیسه"},
+            {id: 48, name: "لوبیا چیتی", unit: "کیسه"},
+            {id: 49, name: "لپه", unit: "کیسه"},
+            {id: 50, name: "لوبیا قرمز", unit: "کیسه"},
+            {id: 51, name: "چای دو غزال", unit: "کارتن"},
+            {id: 52, name: "آلو بخارا", unit: "بسته"},
+            {id: 53, name: "وایتکس ۴ لیتری", unit: "کارتن"},
+            {id: 54, name: "جرمگیر", unit: "کارتن"},
+            {id: 55, name: "رب انار", unit: "بسته"},
+            {id: 56, name: "خیارشور دبه‌ای", unit: "دبه"},
+            {id: 57, name: "پلاستیک چاپی رستوران", unit: "بسته"},
+            {id: 58, name: "رول دستگاه شیرینگ", unit: "عدد"},
+            {id: 59, name: "ماست دبه ۱۰ کیلویی", unit: "دبه"},
+            {id: 60, name: "شیر", unit: "دبه"},
+            {id: 61, name: "ماست موسیر ۱۰۰ گرمی", unit: "کارتن"},
+            {id: 62, name: "سبزی پلویی", unit: ""},
+            {id: 63, name: "فلفل سیاه ۱۰ کیلویی", unit: "گیلو"},
+            {id: 64, name: "زردچوبه ۱۰ کیلویی", unit: "گیلو"},
+            {id: 65, name: "سبزی دلال", unit: ""},
+            {id: 66, name: "سبزی قورمه سبزی", unit: ""},
+            {id: 67, name: "دستمال ساده رومیزی", unit: "بسته"},
+            {id: 68, name: "دستمال ضخیم توالت", unit: "بسته"},
+            {id: 69, name: "نوشابه قوطی", unit: "کارتن"},
+            {id: 70, name: "نوشابه بطری زرد", unit: "کارتن"},
+            {id: 71, name: "شیشه شور", unit: "عدد"},
+            {id: 72, name: "آب معدنی", unit: "بسته"},
+            {id: 73, name: "ترشی هالوپینو", unit: "عدد"},
+            {id: 74, name: "اکبر جوجه", unit: "کارتن"},
+            {id: 75, name: "فیله بره", unit: "کیلو"},
+            {id: 76, name: "شنیسل سینه", unit: "کیلو"},
+            {id: 77, name: "شنیسل ران", unit: "کیلو"},
+            {id: 78, name: "فیله مرغ", unit: "کیلو"},
+            {id: 79, name: "نخودی", unit: "کیلو"},
+            {id: 80, name: "قلوه‌گاه بره", unit: "کیلو"},
+            {id: 81, name: "کتف و بال", unit: "کیلو"},
+            {id: 82, name: "ران مرغ", unit: "کیلو"},
+            {id: 83, name: "کره کنار برنج", unit: "کیلو"},
+            {id: 84, name: "طرح حیوانی", unit: "کیلو"},
+            {id: 85, name: "برگر", unit: "کیلو"},
+            {id: 86, name: "شیشلیک آمل", unit: "کیلو"},
+            {id: 87, name: "شیشلیک مشهد", unit: "کیلو"},
+            {id: 88, name: "ماهیچه بره", unit: "کیلو"},
+            {id: 89, name: "گردن بره", unit: "کیلو"},
+            {id: 90, name: "سبزی شکم پر", unit: "کیلو"},
+            {id: 91, name: "زرشک", unit: "کیلو"},
+            {id: 92, name: "گردو خورشتی", unit: "کیلو"},
+            {id: 93, name: "ماهی قزل آلا", unit: "کیلو"},
+            {id: 94, name: "خیارشور", unit: "کیلو"},
+            {id: 95, name: "برنج طارم", unit: "کیلو"}
+        ];
+
+        let employees = [];
+        let customers = [];
+        let transactions = [];
+        let counters = { I: 0, P: 0, E: 0, R: 0, C: 0 };
+        let selectedItem = null;
+        let selectedItemId = null;
+        let selectedEmployeeId = null;
+        let selectedCustomerId = null;
+        let currentMessage = '';
+        
+        // متغیرهای جدید برای حالت چند کالایی
+        let multiSelectedItems = [];
+        let currentMultiItem = null;
+
+        for (let i = 1; i <= 12; i++) {
+            employees.push({id: i, name: `پرسنل ${i}`});
+        }
+
+        customers.push({id: 1, name: 'سعید', balance: 0});
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(item => {
+                if (item.textContent.includes(
+                    tabId === 'inventoryTab' ? 'انبار' :
+                    tabId === 'personnelTab' ? 'پرسنل' :
+                    tabId === 'customersTab' ? 'مشتریان' :
+                    tabId === 'expensesTab' ? 'هزینه‌ها' :
+                    tabId === 'reportTab' ? 'گزارش' : 'تنظیمات'
+                )) {
+                    item.classList.add('active');
+                }
+            });
+
+            if (tabId === 'settingsTab') {
+                refreshItemsList();
+                refreshEmployeesList();
+                refreshCustomersList();
+            }
+        }
+
+        function switchInventoryMode(mode) {
+            // تغییر وضعیت تب‌های سوئیچر
+            document.querySelectorAll('.tab-switch').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll(`.tab-switch`).forEach(tab => {
+                if (tab.textContent.includes(mode === 'single' ? 'تک کالا' : 'چند کالا')) {
+                    tab.classList.add('active');
+                }
+            });
+            
+            // تغییر نمایش فرم‌ها
+            document.querySelectorAll('.inventory-tabs').forEach(tab => tab.classList.remove('active'));
+            if (mode === 'single') {
+                document.getElementById('singleItemTab').classList.add('active');
+                // مخفی کردن لیست کالاهای چندتایی
+                document.getElementById('multiSelectedItemsContainer').style.display = 'none';
+            } else {
+                document.getElementById('multiItemTab').classList.add('active');
+                // بارگذاری لیست کالاهای چندتایی
+                loadMultiItemsList();
+            }
+            
+            // ریست کردن انتخاب‌ها
+            selectedItem = null;
+            selectedItemId = null;
+            document.getElementById('itemSearch').value = '';
+            document.getElementById('multiItemSearch').value = '';
+            document.getElementById('multiItemForm').classList.remove('active');
+        }
+
+        function formatNumber(num) {
+            return num ? num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "0";
+        }
+
+        function showAlert(title, message) {
+            document.getElementById('alertTitle').textContent = title;
+            document.getElementById('alertMessage').textContent = message;
+            document.getElementById('alertModal').classList.add('active');
+        }
+
+        function closeAlert() {
+            document.getElementById('alertModal').classList.remove('active');
+        }
+
+        function closeModal() {
+            document.getElementById('confirmModal').classList.remove('active');
+            currentMessage = '';
+        }
+
+        function generateUniqueId(type) {
+            const now = new Date();
+            const date = `${now.getFullYear().toString().slice(2)}${(now.getMonth()+1).toString().padStart(2,'0')}${now.getDate().toString().padStart(2,'0')}`;
+            
+            if (!counters[type]) counters[type] = 0;
+            counters[type]++;
+            
+            return `${type}-${date}-${counters[type].toString().padStart(2,'0')}`;
+        }
+
+        function loadItemsList() {
+            const itemListDiv = document.getElementById('itemList');
+            itemListDiv.innerHTML = '';
+            
+            items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'item-option';
+                div.textContent = `${item.name} (${item.unit})`;
+                div.onclick = () => {
+                    selectedItem = item;
+                    selectedItemId = item.id;
+                    
+                    document.querySelectorAll('#itemList .item-option').forEach(el => {
+                        el.style.background = '';
+                    });
+                    div.style.background = '#D4A574';
+                    
+                    document.getElementById('itemSearch').value = `${item.name} (${item.unit})`;
+                    itemListDiv.style.display = 'none';
+                };
+                itemListDiv.appendChild(div);
+            });
+            
+            itemListDiv.style.display = 'none';
+        }
+
+        function loadMultiItemsList() {
+            const itemListDiv = document.getElementById('multiItemList');
+            itemListDiv.innerHTML = '';
+            
+            items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'item-option';
+                div.textContent = `${item.name} (${item.unit})`;
+                div.onclick = () => {
+                    currentMultiItem = item;
+                    
+                    document.querySelectorAll('#multiItemList .item-option').forEach(el => {
+                        el.style.background = '';
+                    });
+                    div.style.background = '#D4A574';
+                    
+                    document.getElementById('multiItemSearch').value = `${item.name} (${item.unit})`;
+                    document.getElementById('multiItemForm').classList.add('active');
+                    itemListDiv.style.display = 'none';
+                    
+                    // ریست کردن فیلدها
+                    document.getElementById('multiQuantity').value = '';
+                    document.getElementById('multiPrice').value = '';
+                    
+                    // فعال/غیرفعال کردن فیلد قیمت بر اساس نوع عملیات
+                    const type = document.getElementById('multiInventoryType').value;
+                    const priceInput = document.getElementById('multiPrice');
+                    if (type === 'out') {
+                        priceInput.disabled = true;
+                        priceInput.placeholder = 'برای خروج نیاز نیست';
+                    } else {
+                        priceInput.disabled = false;
+                        priceInput.placeholder = 'قیمت واحد را وارد کنید';
+                    }
+                };
+                itemListDiv.appendChild(div);
+            });
+            
+            itemListDiv.style.display = 'none';
+        }
+
+        function addToMultiItemsList() {
+            if (!currentMultiItem) {
+                showAlert('خطا', 'لطفاً یک کالا انتخاب کنید');
+                return;
+            }
+            
+            const quantity = document.getElementById('multiQuantity').value;
+            const price = document.getElementById('multiPrice').value;
+            const type = document.getElementById('multiInventoryType').value;
+            
+            if (!quantity || quantity <= 0) {
+                showAlert('خطا', 'لطفاً مقدار را وارد کنید');
+                return;
+            }
+            
+            if (type === 'in' && (!price || price <= 0)) {
+                showAlert('خطا', 'لطفاً قیمت واحد را وارد کنید');
+                return;
+            }
+            
+            // اضافه کردن به لیست
+            const newItem = {
+                id: currentMultiItem.id,
+                name: currentMultiItem.name,
+                unit: currentMultiItem.unit,
+                quantity: quantity,
+                price: type === 'in' ? price : 0,
+                total: type === 'in' ? quantity * price : 0
+            };
+            
+            multiSelectedItems.push(newItem);
+            
+            // نمایش لیست
+            updateMultiItemsDisplay();
+            
+            // ریست کردن فرم
+            document.getElementById('multiQuantity').value = '';
+            document.getElementById('multiPrice').value = '';
+            document.getElementById('multiItemSearch').value = '';
+            document.getElementById('multiItemForm').classList.remove('active');
+            currentMultiItem = null;
+            
+            // نمایش لیست کالاهای انتخاب شده
+            document.getElementById('multiSelectedItemsContainer').style.display = 'block';
+        }
+
+        function updateMultiItemsDisplay() {
+            const container = document.getElementById('selectedItemsList');
+            container.innerHTML = '';
+            
+            let totalAmount = 0;
+            
+            multiSelectedItems.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'selected-item';
+                
+                const total = item.quantity * (item.price || 0);
+                totalAmount += total;
+                
+                itemDiv.innerHTML = `
+                    <div class="item-details">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-quantity">مقدار: ${item.quantity} ${item.unit}</div>
+                        ${item.price > 0 ? `<div class="item-price">قیمت: ${formatNumber(item.price)} ریال (جمع: ${formatNumber(total)} ریال)</div>` : ''}
+                    </div>
+                    <div class="remove-item" onclick="removeMultiItem(${index})">×</div>
+                `;
+                
+                container.appendChild(itemDiv);
+            });
+            
+            // به روز رسانی تعداد
+            document.getElementById('selectedItemsCount').textContent = multiSelectedItems.length;
+            
+            // نمایش جمع کل اگر نوع عملیات "ورود" باشد
+            const type = document.getElementById('multiInventoryType').value;
+            if (type === 'in' && totalAmount > 0) {
+                const totalDiv = document.createElement('div');
+                totalDiv.style.marginTop = '10px';
+                totalDiv.style.padding = '10px';
+                totalDiv.style.background = '#E8F5E9';
+                totalDiv.style.borderRadius = '8px';
+                totalDiv.style.textAlign = 'center';
+                totalDiv.style.fontWeight = 'bold';
+                totalDiv.innerHTML = `💰 جمع کل: ${formatNumber(totalAmount)} ریال`;
+                container.appendChild(totalDiv);
+            }
+        }
+
+        function removeMultiItem(index) {
+            multiSelectedItems.splice(index, 1);
+            updateMultiItemsDisplay();
+            
+            if (multiSelectedItems.length === 0) {
+                document.getElementById('multiSelectedItemsContainer').style.display = 'none';
+            }
+        }
+
+        function clearAllSelectedItems() {
+            if (multiSelectedItems.length > 0) {
+                if (confirm('آیا از حذف همه کالاهای انتخاب شده اطمینان دارید؟')) {
+                    multiSelectedItems = [];
+                    document.getElementById('multiSelectedItemsContainer').style.display = 'none';
+                    document.getElementById('multiItemSearch').value = '';
+                    document.getElementById('multiItemForm').classList.remove('active');
+                    currentMultiItem = null;
+                }
+            }
+        }
+
+        function loadEmployeesSelect() {
+            const select = document.getElementById('employeeSelect');
+            select.innerHTML = '';
+            employees.forEach(emp => {
+                const option = document.createElement('option');
+                option.value = emp.id;
+                option.textContent = emp.name;
+                select.appendChild(option);
+            });
+        }
+
+        function loadCustomersSelect() {
+            const select = document.getElementById('customerSelect');
+            select.innerHTML = '';
+            customers.forEach(cust => {
+                const option = document.createElement('option');
+                option.value = cust.id;
+                option.textContent = `${cust.name} (مانده: ${formatNumber(cust.balance)} ریال)`;
+                select.appendChild(option);
+            });
+        }
+
+        function loadCustomerItemsSelect() {
+            const select = document.getElementById('customerItemSelect');
+            select.innerHTML = '<option value="">-- انتخاب کالا --</option>';
+            items.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.id;
+                option.textContent = `${item.name} (${item.unit})`;
+                select.appendChild(option);
+            });
+        }
+
+        function updateCustomerBalance() {
+            const customerId = parseInt(document.getElementById('customerSelect').value);
+            if (!customerId) return;
+            
+            const customer = customers.find(c => c.id === customerId);
+            if (customer) {
+                document.getElementById('customerBalance').textContent = formatNumber(customer.balance);
+                document.getElementById('customerBalanceDisplay').style.display = 'block';
+            }
+        }
+
+        function createSingleInventoryCard() {
+            const type = document.getElementById('inventoryType').value;
+            const quantity = document.getElementById('quantity').value;
+            const price = document.getElementById('price').value;
+            const desc = document.getElementById('inventoryDesc').value;
+            
+            if (!selectedItem) {
+                showAlert('خطا', 'لطفاً یک کالا انتخاب کنید');
+                return;
+            }
+            
+            if (!quantity || quantity <= 0) {
+                showAlert('خطا', 'لطفاً مقدار را وارد کنید');
+                return;
+            }
+            
+            if (type === 'in' && (!price || price <= 0)) {
+                showAlert('خطا', 'لطفاً قیمت واحد را وارد کنید');
+                return;
+            }
+            
+            const uniqueId = generateUniqueId('I');
+            const date = new Date().toLocaleDateString('fa-IR');
+            const time = new Date().toLocaleTimeString('fa-IR', {hour: '2-digit', minute:'2-digit'});
+            
+            let message = `🏢 رستوران شقایق\n`;
+            message += `📦 کارت انبار | ${type === 'in' ? '✅ ورود' : '🔻 خروج'}\n`;
+            message += `🆔 کد: ${uniqueId}\n`;
+            message += `─`.repeat(30) + `\n`;
+            message += `📅 تاریخ: ${date} - ساعت ${time}\n`;
+            message += `📌 کالا: ${selectedItem.name}\n`;
+            message += `📏 مقدار: ${quantity} ${selectedItem.unit}\n`;
+            
+            if (type === 'in' && price) {
+                const total = quantity * price;
+                message += `💰 قیمت واحد: ${formatNumber(price)} ریال\n`;
+                message += `💵 جمع: ${formatNumber(total)} ریال\n`;
+            }
+            
+            if (desc) {
+                message += `📝 توضیح: ${desc}\n`;
+            }
+            
+            message += `─`.repeat(30) + `\n`;
+            message += `✅ جهت ثبت در سیستم حسابداری`;
+            
+            document.getElementById('inventoryPreview').textContent = message;
+            document.getElementById('inventoryPreview').style.display = 'block';
+            
+            transactions.push({
+                id: uniqueId,
+                type: 'inventory',
+                subtype: type,
+                item: selectedItem,
+                quantity: quantity,
+                price: price,
+                description: desc,
+                timestamp: new Date(),
+                message: message
+            });
+            
+            document.getElementById('confirmMessage').textContent = message;
+            document.getElementById('confirmModal').classList.add('active');
+            currentMessage = message;
+        }
+
+        function createMultiInventoryCard() {
+            const type = document.getElementById('multiInventoryType').value;
+            const desc = document.getElementById('multiInventoryDesc').value;
+            
+            if (multiSelectedItems.length === 0) {
+                showAlert('خطا', 'لطفاً حداقل یک کالا به لیست اضافه کنید');
+                return;
+            }
+            
+            const uniqueId = generateUniqueId('I');
+            const date = new Date().toLocaleDateString('fa-IR');
+            const time = new Date().toLocaleTimeString('fa-IR', {hour: '2-digit', minute:'2-digit'});
+            
+            let message = `🏢 رستوران شقایق\n`;
+            message += `📦 کارت انبار چند کالایی | ${type === 'in' ? '✅ ورود' : '🔻 خروج'}\n`;
+            message += `🆔 کد: ${uniqueId}\n`;
+            message += `─`.repeat(30) + `\n`;
+            message += `📅 تاریخ: ${date} - ساعت ${time}\n`;
+            message += `📋 تعداد کالاها: ${multiSelectedItems.length} مورد\n`;
+            message += `─`.repeat(30) + `\n`;
+            
+            let totalAmount = 0;
+            
+            multiSelectedItems.forEach((item, index) => {
+                message += `${index + 1}. ${item.name}\n`;
+                message += `   📏 مقدار: ${item.quantity} ${item.unit}\n`;
+                
+                if (type === 'in' && item.price > 0) {
+                    const itemTotal = item.quantity * item.price;
+                    totalAmount += itemTotal;
+                    message += `   💰 قیمت واحد: ${formatNumber(item.price)} ریال\n`;
+                    message += `   💵 جمع این کالا: ${formatNumber(itemTotal)} ریال\n`;
+                }
+                
+                if (index < multiSelectedItems.length - 1) {
+                    message += `   ─\n`;
+                }
+            });
+            
+            if (type === 'in' && totalAmount > 0) {
+                message += `─`.repeat(30) + `\n`;
+                message += `💰 جمع کل خرید: ${formatNumber(totalAmount)} ریال\n`;
+            }
+            
+            if (desc) {
+                message += `📝 توضیح کلی: ${desc}\n`;
+            }
+            
+            message += `─`.repeat(30) + `\n`;
+            message += `✅ جهت ثبت در سیستم حسابداری`;
+            
+            document.getElementById('inventoryPreview').textContent = message;
+            document.getElementById('inventoryPreview').style.display = 'block';
+            
+            // ذخیره تراکنش
+            transactions.push({
+                id: uniqueId,
+                type: 'inventory',
+                subtype: type,
+                items: [...multiSelectedItems],
+                totalAmount: totalAmount,
+                description: desc,
+                timestamp: new Date(),
+                message: message,
+                isMulti: true
+            });
+            
+            document.getElementById('confirmMessage').textContent = message;
+            document.getElementById('confirmModal').classList.add('active');
+            currentMessage = message;
+            
+            // ریست کردن فرم
+            multiSelectedItems = [];
+            document.getElementById('multiSelectedItemsContainer').style.display = 'none';
+            document.getElementById('multiItemSearch').value = '';
+            document.getElementById('multiInventoryDesc').value = '';
+            document.getElementById('multiItemForm').classList.remove('active');
+            currentMultiItem = null;
+        }
+
+        function createPersonnelCard() {
+            const employeeId = parseInt(document.getElementById('employeeSelect').value);
+            const paymentType = document.getElementById('paymentType').value;
+            const amount = document.getElementById('amount').value;
+            const period = document.getElementById('period').value;
+            const desc = document.getElementById('personnelDesc').value;
+            
+            if (!employeeId) {
+                showAlert('خطا', 'لطفاً پرسنل را انتخاب کنید');
+                return;
+            }
+            
+            if (!amount || amount <= 0) {
+                showAlert('خطا', 'لطفاً مبلغ را وارد کنید');
+                return;
+            }
+            
+            const employee = employees.find(e => e.id === employeeId);
+            if (!employee) {
+                showAlert('خطا', 'پرسنل انتخاب شده نامعتبر است');
+                return;
+            }
+            
+            const uniqueId = generateUniqueId('P');
+            const date = new Date().toLocaleDateString('fa-IR');
+            const time = new Date().toLocaleTimeString('fa-IR', {hour: '2-digit', minute:'2-digit'});
+            
+            const paymentTypes = {
+                salary: '💰 حقوق',
+                advance: '💸 مساعده',
+                food: '🍲 حق غذا',
+                bonus: '🎁 پاداش',
+                other: '📤 سایر'
+            };
+            
+            let message = `🏢 رستوران شقایق\n`;
+            message += `👥 کارت پرداخت پرسنل\n`;
+            message += `🆔 کد: ${uniqueId}\n`;
+            message += `─`.repeat(30) + `\n`;
+            message += `📅 تاریخ: ${date} - ساعت ${time}\n`;
+            message += `👤 پرسنل: ${employee.name}\n`;
+            message += `${paymentTypes[paymentType]}\n`;
+            message += `💵 مبلغ: ${formatNumber(amount)} ریال\n`;
+            
+            if (period && paymentType === 'salary') {
+                message += `🗓️ دوره: ${period}\n`;
+            }
+            
+            if (desc) {
+                message += `📝 توضیح: ${desc}\n`;
+            }
+            
+            message += `─`.repeat(30) + `\n`;
+            message += `✅ جهت ثبت در سیستم حسابداری`;
+            
+            document.getElementById('personnelPreview').textContent = message;
+            document.getElementById('personnelPreview').style.display = 'block';
+            
+            transactions.push({
+                id: uniqueId,
+                type: 'personnel',
+                employee: employee,
+                paymentType: paymentType,
+                amount: amount,
+                period: period,
+                description: desc,
+                timestamp: new Date(),
+                message: message
+            });
+            
+            document.getElementById('confirmMessage').textContent = message;
+            document.getElementById('confirmModal').classList.add('active');
+            currentMessage = message;
+        }
+
+        function createCustomerTransaction() {
+            const customerId = parseInt(document.getElementById('customerSelect').value);
+            const transactionType = document.getElementById('customerTransactionType').value;
+            const itemId = parseInt(document.getElementById('customerItemSelect').value);
+            const quantity = parseFloat(document.getElementById('customerQuantity').value);
+            const price = parseInt(document.getElementById('customerPrice').value);
+            const cashAmount = parseInt(document.getElementById('customerCashAmount').value);
+            const desc = document.getElementById('customerDesc').value;
+            
+            if (!customerId) {
+                showAlert('خطا', 'لطفاً مشتری را انتخاب کنید');
+                return;
+            }
+            
+            const customer = customers.find(c => c.id === customerId);
+            if (!customer) {
+                showAlert('خطا', 'مشتری انتخاب شده نامعتبر است');
+                return;
+            }
+            
+            const uniqueId = generateUniqueId('C');
+            const date = new Date().toLocaleDateString('fa-IR');
+            const time = new Date().toLocaleTimeString('fa-IR', {hour: '2-digit', minute:'2-digit'});
+            
+            let message = `🏢 رستوران شقایق\n`;
+            message += `🤝 تراکنش مشتری\n`;
+            message += `🆔 کد: ${uniqueId}\n`;
+            message += `─`.repeat(30) + `\n`;
+            message += `📅 تاریخ: ${date} - ساعت ${time}\n`;
+            message += `👤 مشتری: ${customer.name}\n`;
+            
+            let amount = 0;
+            
+            if (transactionType === 'buy') {
+                if (!itemId) {
+                    showAlert('خطا', 'لطفاً کالا را انتخاب کنید');
+                    return;
+                }
+                if (!quantity || quantity <= 0) {
+                    showAlert('خطا', 'لطفاً مقدار را وارد کنید');
+                    return;
+                }
+                if (!price || price <= 0) {
+                    showAlert('خطا', 'لطفاً قیمت واحد را وارد کنید');
+                    return;
+                }
+                
+                const item = items.find(i => i.id === itemId);
+                amount = quantity * price;
+                customer.balance += amount;
+                
+                message += `🛒 خرید از مشتری\n`;
+                message += `📦 کالا: ${item.name}\n`;
+                message += `📏 مقدار: ${quantity} ${item.unit}\n`;
+                message += `💰 قیمت واحد: ${formatNumber(price)} ریال\n`;
+                message += `💵 جمع: ${formatNumber(amount)} ریال\n`;
+                
+            } else if (transactionType === 'sell') {
+                if (!itemId) {
+                    showAlert('خطا', 'لطفاً کالا را انتخاب کنید');
+                    return;
+                }
+                if (!quantity || quantity <= 0) {
+                    showAlert('خطا', 'لطفاً مقدار را وارد کنید');
+                    return;
+                }
+                if (!price || price <= 0) {
+                    showAlert('خطا', 'لطفاً قیمت واحد را وارد کنید');
+                    return;
+                }
+                
+                const item = items.find(i => i.id === itemId);
+                amount = quantity * price;
+                customer.balance -= amount;
+                
+                message += `💰 فروش به مشتری\n`;
+                message += `📦 کالا: ${item.name}\n`;
+                message += `📏 مقدار: ${quantity} ${item.unit}\n`;
+                message += `💰 قیمت واحد: ${formatNumber(price)} ریال\n`;
+                message += `💵 جمع: ${formatNumber(amount)} ریال\n`;
+                
+            } else if (transactionType === 'payment') {
+                if (!cashAmount || cashAmount <= 0) {
+                    showAlert('خطا', 'لطفاً مبلغ پرداختی را وارد کنید');
+                    return;
+                }
+                
+                amount = cashAmount;
+                customer.balance -= amount;
+                
+                message += `💳 پرداخت به مشتری\n`;
+                message += `💵 مبلغ: ${formatNumber(amount)} ریال\n`;
+                
+            } else if (transactionType === 'receive') {
+                if (!cashAmount || cashAmount <= 0) {
+                    showAlert('خطا', 'لطفاً مبلغ دریافتی را وارد کنید');
+                    return;
+                }
+                
+                amount = cashAmount;
+                customer.balance += amount;
+                
+                message += `💵 دریافت از مشتری\n`;
+                message += `💵 مبلغ: ${formatNumber(amount)} ریال\n`;
+            }
+            
+            message += `📝 توضیح: ${desc || 'بدون توضیح'}\n`;
+            message += `🏦 مانده جدید: ${formatNumber(customer.balance)} ریال\n`;
+            message += `─`.repeat(30) + `\n`;
+            message += `✅ جهت ثبت در سیستم حسابداری`;
+            
+            document.getElementById('customerPreview').textContent = message;
+            document.getElementById('customerPreview').style.display = 'block';
+            
+            transactions.push({
+                id: uniqueId,
+                type: 'customer',
+                customer: customer,
+                transactionType: transactionType,
+                amount: amount,
+                description: desc,
+                timestamp: new Date(),
+                message: message
+            });
+            
+            document.getElementById('confirmMessage').textContent = message;
+            document.getElementById('confirmModal').classList.add('active');
+            currentMessage = message;
+            
+            updateCustomerBalance();
+            loadCustomersSelect();
+        }
+
+        function createExpenseCard() {
+            const title = document.getElementById('expenseTitle').value;
+            const amount = document.getElementById('expenseAmount').value;
+            const desc = document.getElementById('expenseDesc').value;
+            
+            if (!title) {
+                showAlert('خطا', 'لطفاً عنوان هزینه را وارد کنید');
+                return;
+            }
+            
+            if (!amount || amount <= 0) {
+                showAlert('خطا', 'لطفاً مبلغ را وارد کنید');
+                return;
+            }
+            
+            const uniqueId = generateUniqueId('E');
+            const date = new Date().toLocaleDateString('fa-IR');
+            const time = new Date().toLocaleTimeString('fa-IR', {hour: '2-digit', minute:'2-digit'});
+            
+            let message = `🏢 رستوران شقایق\n`;
+            message += `💸 کارت هزینه متفرقه\n`;
+            message += `🆔 کد: ${uniqueId}\n`;
+            message += `─`.repeat(30) + `\n`;
+            message += `📅 تاریخ: ${date} - ساعت ${time}\n`;
+            message += `📌 عنوان: ${title}\n`;
+            message += `💵 مبلغ: ${formatNumber(amount)} ریال\n`;
+            
+            if (desc) {
+                message += `📝 توضیح: ${desc}\n`;
+            }
+            
+            message += `─`.repeat(30) + `\n`;
+            message += `✅ جهت ثبت در سیستم حسابداری`;
+            
+            document.getElementById('expensePreview').textContent = message;
+            document.getElementById('expensePreview').style.display = 'block';
+            
+            transactions.push({
+                id: uniqueId,
+                type: 'expense',
+                title: title,
+                amount: amount,
+                description: desc,
+                timestamp: new Date(),
+                message: message
+            });
+            
+            document.getElementById('confirmMessage').textContent = message;
+            document.getElementById('confirmModal').classList.add('active');
+            currentMessage = message;
+        }
+
+        function createDailyReport() {
+            const today = new Date().toLocaleDateString('fa-IR');
+            const todayStart = new Date();
+            todayStart.setHours(0,0,0,0);
+            
+            const todayTransactions = transactions.filter(t => t.timestamp >= todayStart);
+            
+            if (todayTransactions.length === 0) {
+                showAlert('اطلاع', 'هیچ تراکنشی برای امروز ثبت نشده است');
+                return;
+            }
+            
+            const uniqueId = generateUniqueId('R');
+            const time = new Date().toLocaleTimeString('fa-IR', {hour: '2-digit', minute:'2-digit'});
+            
+            let message = `🏢 رستوران شقایق\n`;
+            message += `📊 گزارش عملکرد روزانه\n`;
+            message += `🆔 کد گزارش: ${uniqueId}\n`;
+            message += `📅 تاریخ: ${today} - ساعت ${time}\n`;
+            message += `═`.repeat(30) + `\n`;
+            
+            const inventoryToday = todayTransactions.filter(t => t.type === 'inventory');
+            if (inventoryToday.length > 0) {
+                message += `📦 **امور انبار (${inventoryToday.length} مورد)**\n`;
+                inventoryToday.forEach(t => {
+                    if (t.isMulti) {
+                        const icon = t.subtype === 'in' ? '✅' : '🔻';
+                        message += `• ${icon} کارت چند کالایی (${t.items.length} کالا)\n`;
+                    } else {
+                        const icon = t.subtype === 'in' ? '✅' : '🔻';
+                        message += `• ${icon} ${t.item.name}: ${t.quantity} ${t.item.unit}\n`;
+                    }
+                });
+                message += `\n`;
+            }
+            
+            const personnelToday = todayTransactions.filter(t => t.type === 'personnel');
+            if (personnelToday.length > 0) {
+                message += `👥 **امور پرسنل (${personnelToday.length} مورد)**\n`;
+                personnelToday.forEach(t => {
+                    message += `• ${t.employee.name}: ${formatNumber(t.amount)} ریال\n`;
+                });
+                message += `\n`;
+            }
+            
+            const customersToday = todayTransactions.filter(t => t.type === 'customer');
+            if (customersToday.length > 0) {
+                message += `🤝 **تراکنش‌های مشتریان (${customersToday.length} مورد)**\n`;
+                customersToday.forEach(t => {
+                    message += `• ${t.customer.name}: ${formatNumber(t.amount)} ریال\n`;
+                });
+                message += `\n`;
+            }
+            
+            const expensesToday = todayTransactions.filter(t => t.type === 'expense');
+            if (expensesToday.length > 0) {
+                message += `💸 **هزینه‌های متفرقه (${expensesToday.length} مورد)**\n`;
+                expensesToday.forEach(t => {
+                    message += `• ${t.title}: ${formatNumber(t.amount)} ریال\n`;
+                });
+                message += `\n`;
+            }
+            
+            const totalPersonnel = personnelToday.reduce((sum, t) => sum + parseFloat(t.amount), 0);
+            const totalExpenses = expensesToday.reduce((sum, t) => sum + parseFloat(t.amount), 0);
+            const totalInventory = inventoryToday.reduce((sum, t) => {
+                if (t.isMulti) {
+                    return sum + (parseFloat(t.totalAmount) || 0);
+                } else {
+                    return sum + (parseFloat(t.quantity) * parseFloat(t.price || 0));
+                }
+            }, 0);
+            const totalCustomers = customersToday.reduce((sum, t) => sum + parseFloat(t.amount), 0);
+            
+            message += `💰 **جمع‌بندی مالی امروز**\n`;
+            message += `• کل پرداختی‌های پرسنل: ${formatNumber(totalPersonnel)} ریال\n`;
+            message += `• کل خرید انبار: ${formatNumber(totalInventory)} ریال\n`;
+            message += `• کل هزینه‌های متفرقه: ${formatNumber(totalExpenses)} ریال\n`;
+            message += `• کل تراکنش‌های مشتریان: ${formatNumber(totalCustomers)} ریال\n`;
+            message += `• **مجموع کل تراکنش‌ها:** ${formatNumber(totalPersonnel + totalInventory + totalExpenses + totalCustomers)} ریال\n`;
+            message += `═`.repeat(30) + `\n`;
+            message += `✅ گزارش خودکار - جهت بررسی و ثبت`;
+            
+            document.getElementById('reportPreview').textContent = message;
+            document.getElementById('reportPreview').style.display = 'block';
+            
+            document.getElementById('confirmMessage').textContent = message;
+            document.getElementById('confirmModal').classList.add('active');
+            currentMessage = message;
+        }
+
+        function sendConfirmedMessage() {
+            if (currentMessage) {
+                const encodedMessage = encodeURIComponent(currentMessage);
+                const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
+                const telegramUrl = `https://t.me/share/url?url=&text=${encodedMessage}`;
+                
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'کارت رستوران شقایق',
+                        text: currentMessage
+                    }).then(() => {
+                        console.log('پیام با موفقیت به اشتراک گذاشته شد');
+                    }).catch(err => {
+                        console.log('خطا در اشتراک‌گذاری:', err);
+                        window.open(telegramUrl, '_blank');
+                    });
+                } else {
+                    const choice = confirm("پیام آماده است. برای ارسال به تلگرام OK را بزنید، برای واتس‌اپ Cancel را بزنید.");
+                    if (choice) {
+                        window.open(telegramUrl, '_blank');
+                    } else {
+                        window.open(whatsappUrl, '_blank');
+                    }
+                }
+                
+                document.querySelectorAll('input, textarea, select').forEach(el => {
+                    if (el.type !== 'button') {
+                        el.value = '';
+                    }
+                });
+                document.querySelectorAll('.message-preview').forEach(el => {
+                    el.style.display = 'none';
+                });
+                selectedItem = null;
+                selectedItemId = null;
+                
+                document.getElementById('customerBalanceDisplay').style.display = 'none';
+            }
+            
+            closeModal();
+        }
+
+        function refreshItemsList() {
+            const listDiv = document.getElementById('itemsList');
+            listDiv.innerHTML = '';
+            items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'item-option';
+                div.textContent = `${item.name} (${item.unit})`;
+                div.onclick = () => {
+                    document.getElementById('newItemName').value = item.name;
+                    document.getElementById('newItemUnit').value = item.unit;
+                    selectedItemId = item.id;
+                };
+                listDiv.appendChild(div);
+            });
+        }
+
+        function refreshEmployeesList() {
+            const listDiv = document.getElementById('employeesList');
+            listDiv.innerHTML = '';
+            employees.forEach(emp => {
+                const div = document.createElement('div');
+                div.className = 'item-option';
+                div.textContent = emp.name;
+                div.onclick = () => {
+                    document.getElementById('newEmployeeName').value = emp.name;
+                    selectedEmployeeId = emp.id;
+                };
+                listDiv.appendChild(div);
+            });
+        }
+
+        function refreshCustomersList() {
+            const listDiv = document.getElementById('customersList');
+            listDiv.innerHTML = '';
+            customers.forEach(cust => {
+                const div = document.createElement('div');
+                div.className = 'item-option';
+                div.textContent = `${cust.name} (مانده: ${formatNumber(cust.balance)} ریال)`;
+                div.onclick = () => {
+                    document.getElementById('newCustomerName').value = cust.name;
+                    selectedCustomerId = cust.id;
+                };
+                listDiv.appendChild(div);
+            });
+        }
+
+        function addItem() {
+            const name = document.getElementById('newItemName').value.trim();
+            const unit = document.getElementById('newItemUnit').value.trim();
+            
+            if (!name) {
+                showAlert('خطا', 'لطفاً نام کالا را وارد کنید');
+                return;
+            }
+            
+            if (!unit) {
+                showAlert('خطا', 'لطفاً واحد اندازه‌گیری را وارد کنید');
+                return;
+            }
+            
+            const newId = Math.max(...items.map(i => i.id)) + 1;
+            items.push({id: newId, name: name, unit: unit});
+            
+            document.getElementById('newItemName').value = '';
+            document.getElementById('newItemUnit').value = '';
+            selectedItemId = null;
+            
+            refreshItemsList();
+            loadItemsList();
+            loadMultiItemsList();
+            loadCustomerItemsSelect();
+            showAlert('موفقیت', 'کالا با موفقیت اضافه شد');
+        }
+
+        function editItem() {
+            if (!selectedItemId) {
+                showAlert('خطا', 'لطفاً ابتدا یک کالا را انتخاب کنید');
+                return;
+            }
+            
+            const name = document.getElementById('newItemName').value.trim();
+            const unit = document.getElementById('newItemUnit').value.trim();
+            
+            if (!name) {
+                showAlert('خطا', 'لطفاً نام کالا را وارد کنید');
+                return;
+            }
+            
+            if (!unit) {
+                showAlert('خطا', 'لطفاً واحد اندازه‌گیری را وارد کنید');
+                return;
+            }
+            
+            const itemIndex = items.findIndex(i => i.id === selectedItemId);
+            if (itemIndex !== -1) {
+                items[itemIndex].name = name;
+                items[itemIndex].unit = unit;
+            }
+            
+            document.getElementById('newItemName').value = '';
+            document.getElementById('newItemUnit').value = '';
+            selectedItemId = null;
+            
+            refreshItemsList();
+            loadItemsList();
+            loadMultiItemsList();
+            loadCustomerItemsSelect();
+            showAlert('موفقیت', 'کالا با موفقیت ویرایش شد');
+        }
+
+        function deleteItem() {
+            if (!selectedItemId) {
+                showAlert('خطا', 'لطفاً ابتدا یک کالا را انتخاب کنید');
+                return;
+            }
+            
+            if (!confirm('آیا از حذف این کالا اطمینان دارید؟')) {
+                return;
+            }
+            
+            const itemIndex = items.findIndex(i => i.id === selectedItemId);
+            if (itemIndex !== -1) {
+                items.splice(itemIndex, 1);
+            }
+            
+            document.getElementById('newItemName').value = '';
+            document.getElementById('newItemUnit').value = '';
+            selectedItemId = null;
+            
+            refreshItemsList();
+            loadItemsList();
+            loadMultiItemsList();
+            loadCustomerItemsSelect();
+            showAlert('موفقیت', 'کالا با موفقیت حذف شد');
+        }
+
+        function addEmployee() {
+            const name = document.getElementById('newEmployeeName').value.trim();
+            
+            if (!name) {
+                showAlert('خطا', 'لطفاً نام پرسنل را وارد کنید');
+                return;
+            }
+            
+            const newId = employees.length > 0 ? Math.max(...employees.map(e => e.id)) + 1 : 1;
+            employees.push({id: newId, name: name});
+            
+            document.getElementById('newEmployeeName').value = '';
+            selectedEmployeeId = null;
+            
+            refreshEmployeesList();
+            loadEmployeesSelect();
+            showAlert('موفقیت', 'پرسنل با موفقیت اضافه شد');
+        }
+
+        function editEmployee() {
+            if (!selectedEmployeeId) {
+                showAlert('خطا', 'لطفاً ابتدا یک پرسنل را انتخاب کنید');
+                return;
+            }
+            
+            const name = document.getElementById('newEmployeeName').value.trim();
+            
+            if (!name) {
+                showAlert('خطا', 'لطفاً نام پرسنل را وارد کنید');
+                return;
+            }
+            
+            const empIndex = employees.findIndex(e => e.id === selectedEmployeeId);
+            if (empIndex !== -1) {
+                employees[empIndex].name = name;
+            }
+            
+            document.getElementById('newEmployeeName').value = '';
+            selectedEmployeeId = null;
+            
+            refreshEmployeesList();
+            loadEmployeesSelect();
+            showAlert('موفقیت', 'پرسنل با موفقیت ویرایش شد');
+        }
+
+        function deleteEmployee() {
+            if (!selectedEmployeeId) {
+                showAlert('خطا', 'لطفاً ابتدا یک پرسنل را انتخاب کنید');
+                return;
+            }
+            
+            if (!confirm('آیا از حذف این پرسنل اطمینان دارید؟')) {
+                return;
+            }
+            
+            const empIndex = employees.findIndex(e => e.id === selectedEmployeeId);
+            if (empIndex !== -1) {
+                employees.splice(empIndex, 1);
+            }
+            
+            document.getElementById('newEmployeeName').value = '';
+            selectedEmployeeId = null;
+            
+            refreshEmployeesList();
+            loadEmployeesSelect();
+            showAlert('موفقیت', 'پرسنل با موفقیت حذف شد');
+        }
+
+        function addCustomer() {
+            const name = document.getElementById('newCustomerName').value.trim();
+            
+            if (!name) {
+                showAlert('خطا', 'لطفاً نام مشتری را وارد کنید');
+                return;
+            }
+            
+            const newId = customers.length > 0 ? Math.max(...customers.map(c => c.id)) + 1 : 1;
+            customers.push({id: newId, name: name, balance: 0});
+            
+            document.getElementById('newCustomerName').value = '';
+            selectedCustomerId = null;
+            
+            refreshCustomersList();
+            loadCustomersSelect();
+            showAlert('موفقیت', 'مشتری با موفقیت اضافه شد');
+        }
+
+        function editCustomer() {
+            if (!selectedCustomerId) {
+                showAlert('خطا', 'لطفاً ابتدا یک مشتری را انتخاب کنید');
+                return;
+            }
+            
+            const name = document.getElementById('newCustomerName').value.trim();
+            
+            if (!name) {
+                showAlert('خطا', 'لطفاً نام مشتری را وارد کنید');
+                return;
+            }
+            
+            const custIndex = customers.findIndex(c => c.id === selectedCustomerId);
+            if (custIndex !== -1) {
+                customers[custIndex].name = name;
+            }
+            
+            document.getElementById('newCustomerName').value = '';
+            selectedCustomerId = null;
+            
+            refreshCustomersList();
+            loadCustomersSelect();
+            showAlert('موفقیت', 'مشتری با موفقیت ویرایش شد');
+        }
+
+        function deleteCustomer() {
+            if (!selectedCustomerId) {
+                showAlert('خطا', 'لطفاً ابتدا یک مشتری را انتخاب کنید');
+                return;
+            }
+            
+            if (!confirm('آیا از حذف این مشتری اطمینان دارید؟')) {
+                return;
+            }
+            
+            const custIndex = customers.findIndex(c => c.id === selectedCustomerId);
+            if (custIndex !== -1) {
+                customers.splice(custIndex, 1);
+            }
+            
+            document.getElementById('newCustomerName').value = '';
+            selectedCustomerId = null;
+            
+            refreshCustomersList();
+            loadCustomersSelect();
+            showAlert('موفقیت', 'مشتری با موفقیت حذف شد');
+        }
+
+        function init() {
+            const today = new Date().toLocaleDateString('fa-IR', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            document.getElementById('currentDate').textContent = today;
+            
+            loadItemsList();
+            loadMultiItemsList();
+            loadEmployeesSelect();
+            loadCustomersSelect();
+            loadCustomerItemsSelect();
+            
+            document.getElementById('customerSelect').addEventListener('change', updateCustomerBalance);
+            
+            // event listener برای جستجوی کالا در حالت تک کالایی
+            document.getElementById('itemSearch').addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const itemListDiv = document.getElementById('itemList');
+                itemListDiv.style.display = 'block';
+                
+                document.querySelectorAll('#itemList .item-option').forEach(option => {
+                    if (option.textContent.toLowerCase().includes(searchTerm)) {
+                        option.style.display = 'block';
+                    } else {
+                        option.style.display = 'none';
+                    }
+                });
+            });
+            
+            document.getElementById('itemSearch').addEventListener('click', function() {
+                const itemListDiv = document.getElementById('itemList');
+                itemListDiv.style.display = 'block';
+                
+                if (!selectedItem) {
+                    this.value = '';
+                }
+            });
+            
+            // event listener برای جستجوی کالا در حالت چند کالایی
+            document.getElementById('multiItemSearch').addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const itemListDiv = document.getElementById('multiItemList');
+                itemListDiv.style.display = 'block';
+                
+                document.querySelectorAll('#multiItemList .item-option').forEach(option => {
+                    if (option.textContent.toLowerCase().includes(searchTerm)) {
+                        option.style.display = 'block';
+                    } else {
+                        option.style.display = 'none';
+                    }
+                });
+            });
+            
+            document.getElementById('multiItemSearch').addEventListener('click', function() {
+                const itemListDiv = document.getElementById('multiItemList');
+                itemListDiv.style.display = 'block';
+                
+                if (!currentMultiItem) {
+                    this.value = '';
+                }
+            });
+            
+            document.addEventListener('click', function(event) {
+                const itemListDiv = document.getElementById('itemList');
+                const searchInput = document.getElementById('itemSearch');
+                
+                if (!searchInput.contains(event.target) && !itemListDiv.contains(event.target)) {
+                    itemListDiv.style.display = 'none';
+                }
+                
+                const multiItemListDiv = document.getElementById('multiItemList');
+                const multiSearchInput = document.getElementById('multiItemSearch');
+                
+                if (!multiSearchInput.contains(event.target) && !multiItemListDiv.contains(event.target)) {
+                    multiItemListDiv.style.display = 'none';
+                }
+            });
+            
+            document.getElementById('inventoryType').addEventListener('change', function() {
+                const priceInput = document.getElementById('price');
+                if (this.value === 'out') {
+                    priceInput.placeholder = 'برای خروج نیاز نیست';
+                    priceInput.disabled = true;
+                    priceInput.value = '';
+                } else {
+                    priceInput.placeholder = 'قیمت واحد را وارد کنید';
+                    priceInput.disabled = false;
+                }
+            });
+            
+            document.getElementById('multiInventoryType').addEventListener('change', function() {
+                const priceInput = document.getElementById('multiPrice');
+                if (this.value === 'out') {
+                    priceInput.placeholder = 'برای خروج نیاز نیست';
+                    priceInput.disabled = true;
+                    priceInput.value = '';
+                } else {
+                    priceInput.placeholder = 'قیمت واحد را وارد کنید';
+                    priceInput.disabled = false;
+                }
+                
+                // به روز رسانی نمایش لیست
+                updateMultiItemsDisplay();
+            });
+            
+            document.getElementById('paymentType').addEventListener('change', function() {
+                const periodInput = document.getElementById('period');
+                if (this.value !== 'salary') {
+                    periodInput.placeholder = 'برای این نوع نیاز نیست';
+                    periodInput.disabled = true;
+                    periodInput.value = '';
+                } else {
+                    periodInput.placeholder = 'مثال: مهر ۱۴۰۳';
+                    periodInput.disabled = false;
+                }
+            });
+            
+            document.getElementById('customerTransactionType').addEventListener('change', function() {
+                const itemSelect = document.getElementById('customerItemSelect');
+                const quantityInput = document.getElementById('customerQuantity');
+                const priceInput = document.getElementById('customerPrice');
+                const cashAmountInput = document.getElementById('customerCashAmount');
+                
+                if (this.value === 'buy' || this.value === 'sell') {
+                    itemSelect.disabled = false;
+                    quantityInput.disabled = false;
+                    priceInput.disabled = false;
+                    cashAmountInput.disabled = true;
+                    cashAmountInput.value = '';
+                } else {
+                    itemSelect.disabled = true;
+                    quantityInput.disabled = true;
+                    priceInput.disabled = true;
+                    cashAmountInput.disabled = false;
+                    itemSelect.value = '';
+                    quantityInput.value = '';
+                    priceInput.value = '';
+                }
+            });
+            
+            console.log('سیستم رستوران شقایق بارگذاری شد.');
+        }
+        window.onload = init;
+    </script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        // ثبت Service Worker برای PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('sw.js')
+                    .then(function(registration) {
+                        console.log('✅ Service Worker ثبت شد:', registration.scope);
+                        
+                        // بررسی آپدیت
+                        registration.addEventListener('updatefound', () => {
+                            console.log('🔄 نسخه جدید Service Worker پیدا شد');
+                        });
+                    })
+                    .catch(function(error) {
+                        console.log('❌ خطا در ثبت Service Worker:', error);
+                    });
+            });
+            
+            // کنترل وضعیت آفلاین
+            window.addEventListener('online', function() {
+                console.log('🌐 آنلاین شدید');
+                showAlert('اتصال اینترنت', 'شما آنلاین هستید');
+            });
+            
+            window.addEventListener('offline', function() {
+                console.log('📴 آفلاین شدید');
+                showAlert('عدم اتصال', 'شما آفلاین هستید. برخی قابلیت‌ها ممکن است کار نکند.');
+            });
+        }
+    </script>
+</body>
+</html>

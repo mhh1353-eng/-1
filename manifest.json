@@ -1,0 +1,38 @@
+{
+  "name": "رستوران شقایق",
+  "short_name": "شقایق",
+  "description": "سیستم مدیریت رستوران",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFF8E1",
+  "theme_color": "#5D4037",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "fa",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["business", "food"],
+  "shortcuts": [
+    {
+      "name": "ثبت انبار",
+      "url": "/#inventoryTab",
+      "description": "ثبت ورود و خروج کالا"
+    },
+    {
+      "name": "گزارش روز",
+      "url": "/#reportTab",
+      "description": "گزارش عملکرد روزانه"
+    }
+  ]
+}
