@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazir-font@30.1.0/dist/font-face.css">
     <style>
+        /* استایل‌های قبلی دقیقاً مثل قبل باقی می‌مانند */
         * {
             font-family: 'Vazir', sans-serif;
             margin: 0;
@@ -501,7 +502,7 @@
         </div>
     </div>
 
-    <!-- سایر تب‌ها بدون تغییر باقی می‌مانند -->
+    <!-- سایر تب‌ها -->
     <div id="personnelTab" class="tab-content">
         <div class="card">
             <div class="card-title">👥 پرداخت به پرسنل</div>
@@ -679,6 +680,7 @@
     </div>
 
     <script>
+        // ========== لیست کالاها - یکپارچه و بدون تکرار ==========
         const items = [
             {id: 1, name: "ظرف تک پرسی آلومینیومی", unit: "عدد"},
             {id: 2, name: "ظرف کبابی دوخانه", unit: "عدد"},
@@ -694,7 +696,7 @@
             {id: 12, name: "کتری", unit: "عدد"},
             {id: 13, name: "لیوان چای", unit: "عدد"},
             {id: 14, name: "بشقاب املت", unit: "عدد"},
-            {id: 15, name: "قند کارتنی3کیلو کاترین", unit: "کارتن"},
+            {id: 15, name: "قند کارتنی 3 کیلو کاترین", unit: "کارتن"},
             {id: 16, name: "سس فرانسوی تک", unit: "عدد"},
             {id: 17, name: "رب انار تک نفره", unit: "عدد"},
             {id: 18, name: "سس دبه ۱۰ کیلویی", unit: "دبه"},
@@ -705,10 +707,10 @@
             {id: 23, name: "نمک", unit: "بسته"},
             {id: 24, name: "رب املت", unit: "عدد"},
             {id: 25, name: "رب محلی", unit: "دبه"},
-            {id: 26, name: "آبلیمو 1.5", unit: "عدد"},
-            {id: 27, name: "آبلیمو 1.250", unit: "عدد"},
-            {id: 28, name: "آب نارنج 1.5", unit: "عدد"},
-            {id: 29, name: "سرکه دست چین ۴", unit: "عدد"},
+            {id: 26, name: "آبلیمو 1.5 لیتری", unit: "عدد"},
+            {id: 27, name: "آبلیمو 1.250 لیتری", unit: "عدد"},
+            {id: 28, name: "آب نارنج 1.5 لیتری", unit: "عدد"},
+            {id: 29, name: "سرکه دست چین ۴ لیتری", unit: "عدد"},
             {id: 30, name: "کیسه فریزر رولی", unit: "عدد"},
             {id: 31, name: "کیسه فریزر بسته‌بندی", unit: "عدد"},
             {id: 32, name: "روغن لادن ۱۶ کیلویی", unit: "عدد"},
@@ -740,8 +742,8 @@
             {id: 58, name: "شیر", unit: "کیلو"},
             {id: 59, name: "ماست موسیر ۱۰۰ گرمی", unit: "عدد"},
             {id: 60, name: "سبزی پلویی", unit: "کیلو"},
-            {id: 61, name: "فلفل سیاه کیسه ای", unit: "کیلو"},
-            {id: 62, name: "زردچوبه کیسه ای", unit: "کیلو"},
+            {id: 61, name: "فلفل سیاه کیسه‌ای", unit: "کیلو"},
+            {id: 62, name: "زردچوبه کیسه‌ای", unit: "کیلو"},
             {id: 63, name: "سبزی دلال", unit: "کیلو"},
             {id: 64, name: "دستمال ساده رومیزی", unit: "عدد"},
             {id: 65, name: "دستمال ضخیم توالت", unit: "عدد"},
@@ -797,9 +799,18 @@
             {id: 115, name: "دستمال فله", unit: "عدد"},
             {id: 116, name: "دستمال مخزنی", unit: "عدد"},
             {id: 117, name: "روغن مایع", unit: "عدد"},
-            {id: 118, name: "نارنج", unit: "کیلو"}
+            {id: 118, name: "نارنج", unit: "کیلو"},
+            {id: 119, name: "سرکه قزوین 9.5 لیتری", unit: "عدد"},
+            {id: 120, name: "جرمگیر", unit: "کارتن"},
+            {id: 121, name: "پلاستیک چاپی رستوران", unit: "بسته"},
+            {id: 122, name: "کتف و بال", unit: "کیلو"},
+            {id: 123, name: "ران مرغ", unit: "کیلو"},
+            {id: 124, name: "طرح حیوانی", unit: "کیلو"},
+            {id: 125, name: "برگر", unit: "کیلو"},
+            {id: 126, name: "خیارشور", unit: "کیلو"}
         ];
 
+        // ========== متغیرهای سراسری ==========
         let employees = [];
         let customers = [];
         let transactions = [];
@@ -810,69 +821,18 @@
         let selectedCustomerId = null;
         let currentMessage = '';
         
-        // متغیرهای جدید برای حالت چند کالایی
+        // متغیرهای حالت چند کالایی
         let multiSelectedItems = [];
         let currentMultiItem = null;
 
+        // ========== داده‌های پیش‌فرض ==========
         for (let i = 1; i <= 12; i++) {
             employees.push({id: i, name: `پرسنل ${i}`});
         }
 
         customers.push({id: 1, name: 'سعید', balance: 0});
 
-        function showTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(item => {
-                if (item.textContent.includes(
-                    tabId === 'inventoryTab' ? 'انبار' :
-                    tabId === 'personnelTab' ? 'پرسنل' :
-                    tabId === 'customersTab' ? 'مشتریان' :
-                    tabId === 'expensesTab' ? 'هزینه‌ها' :
-                    tabId === 'reportTab' ? 'گزارش' : 'تنظیمات'
-                )) {
-                    item.classList.add('active');
-                }
-            });
-
-            if (tabId === 'settingsTab') {
-                refreshItemsList();
-                refreshEmployeesList();
-                refreshCustomersList();
-            }
-        }
-
-        function switchInventoryMode(mode) {
-            // تغییر وضعیت تب‌های سوئیچر
-            document.querySelectorAll('.tab-switch').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll(`.tab-switch`).forEach(tab => {
-                if (tab.textContent.includes(mode === 'single' ? 'تک کالا' : 'چند کالا')) {
-                    tab.classList.add('active');
-                }
-            });
-            
-            // تغییر نمایش فرم‌ها
-            document.querySelectorAll('.inventory-tabs').forEach(tab => tab.classList.remove('active'));
-            if (mode === 'single') {
-                document.getElementById('singleItemTab').classList.add('active');
-                // مخفی کردن لیست کالاهای چندتایی
-                document.getElementById('multiSelectedItemsContainer').style.display = 'none';
-            } else {
-                document.getElementById('multiItemTab').classList.add('active');
-                // بارگذاری لیست کالاهای چندتایی
-                loadMultiItemsList();
-            }
-            
-            // ریست کردن انتخاب‌ها
-            selectedItem = null;
-            selectedItemId = null;
-            document.getElementById('itemSearch').value = '';
-            document.getElementById('multiItemSearch').value = '';
-            document.getElementById('multiItemForm').classList.remove('active');
-        }
-
+        // ========== توابع کمکی ==========
         function formatNumber(num) {
             return num ? num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "0";
         }
@@ -902,6 +862,56 @@
             return `${type}-${date}-${counters[type].toString().padStart(2,'0')}`;
         }
 
+        // ========== توابع نمایش تب‌ها ==========
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(item => {
+                if (item.textContent.includes(
+                    tabId === 'inventoryTab' ? 'انبار' :
+                    tabId === 'personnelTab' ? 'پرسنل' :
+                    tabId === 'customersTab' ? 'مشتریان' :
+                    tabId === 'expensesTab' ? 'هزینه‌ها' :
+                    tabId === 'reportTab' ? 'گزارش' : 'تنظیمات'
+                )) {
+                    item.classList.add('active');
+                }
+            });
+
+            if (tabId === 'settingsTab') {
+                refreshItemsList();
+                refreshEmployeesList();
+                refreshCustomersList();
+            }
+        }
+
+        function switchInventoryMode(mode) {
+            document.querySelectorAll('.tab-switch').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll(`.tab-switch`).forEach(tab => {
+                if (tab.textContent.includes(mode === 'single' ? 'تک کالا' : 'چند کالا')) {
+                    tab.classList.add('active');
+                }
+            });
+            
+            document.querySelectorAll('.inventory-tabs').forEach(tab => tab.classList.remove('active'));
+            if (mode === 'single') {
+                document.getElementById('singleItemTab').classList.add('active');
+                document.getElementById('multiSelectedItemsContainer').style.display = 'none';
+            } else {
+                document.getElementById('multiItemTab').classList.add('active');
+                loadMultiItemsList();
+            }
+            
+            selectedItem = null;
+            selectedItemId = null;
+            document.getElementById('itemSearch').value = '';
+            document.getElementById('multiItemSearch').value = '';
+            document.getElementById('multiItemForm').classList.remove('active');
+        }
+
+        // ========== توابع بارگذاری لیست‌ها ==========
         function loadItemsList() {
             const itemListDiv = document.getElementById('itemList');
             itemListDiv.innerHTML = '';
@@ -948,11 +958,9 @@
                     document.getElementById('multiItemForm').classList.add('active');
                     itemListDiv.style.display = 'none';
                     
-                    // ریست کردن فیلدها
                     document.getElementById('multiQuantity').value = '';
                     document.getElementById('multiPrice').value = '';
                     
-                    // فعال/غیرفعال کردن فیلد قیمت بر اساس نوع عملیات
                     const type = document.getElementById('multiInventoryType').value;
                     const priceInput = document.getElementById('multiPrice');
                     if (type === 'out') {
@@ -967,116 +975,6 @@
             });
             
             itemListDiv.style.display = 'none';
-        }
-
-        function addToMultiItemsList() {
-            if (!currentMultiItem) {
-                showAlert('خطا', 'لطفاً یک کالا انتخاب کنید');
-                return;
-            }
-            
-            const quantity = document.getElementById('multiQuantity').value;
-            const price = document.getElementById('multiPrice').value;
-            const type = document.getElementById('multiInventoryType').value;
-            
-            if (!quantity || quantity <= 0) {
-                showAlert('خطا', 'لطفاً مقدار را وارد کنید');
-                return;
-            }
-            
-            if (type === 'in' && (!price || price <= 0)) {
-                showAlert('خطا', 'لطفاً قیمت واحد را وارد کنید');
-                return;
-            }
-            
-            // اضافه کردن به لیست
-            const newItem = {
-                id: currentMultiItem.id,
-                name: currentMultiItem.name,
-                unit: currentMultiItem.unit,
-                quantity: quantity,
-                price: type === 'in' ? price : 0,
-                total: type === 'in' ? quantity * price : 0
-            };
-            
-            multiSelectedItems.push(newItem);
-            
-            // نمایش لیست
-            updateMultiItemsDisplay();
-            
-            // ریست کردن فرم
-            document.getElementById('multiQuantity').value = '';
-            document.getElementById('multiPrice').value = '';
-            document.getElementById('multiItemSearch').value = '';
-            document.getElementById('multiItemForm').classList.remove('active');
-            currentMultiItem = null;
-            
-            // نمایش لیست کالاهای انتخاب شده
-            document.getElementById('multiSelectedItemsContainer').style.display = 'block';
-        }
-
-        function updateMultiItemsDisplay() {
-            const container = document.getElementById('selectedItemsList');
-            container.innerHTML = '';
-            
-            let totalAmount = 0;
-            
-            multiSelectedItems.forEach((item, index) => {
-                const itemDiv = document.createElement('div');
-                itemDiv.className = 'selected-item';
-                
-                const total = item.quantity * (item.price || 0);
-                totalAmount += total;
-                
-                itemDiv.innerHTML = `
-                    <div class="item-details">
-                        <div class="item-name">${item.name}</div>
-                        <div class="item-quantity">مقدار: ${item.quantity} ${item.unit}</div>
-                        ${item.price > 0 ? `<div class="item-price">قیمت: ${formatNumber(item.price)} ریال (جمع: ${formatNumber(total)} ریال)</div>` : ''}
-                    </div>
-                    <div class="remove-item" onclick="removeMultiItem(${index})">×</div>
-                `;
-                
-                container.appendChild(itemDiv);
-            });
-            
-            // به روز رسانی تعداد
-            document.getElementById('selectedItemsCount').textContent = multiSelectedItems.length;
-            
-            // نمایش جمع کل اگر نوع عملیات "ورود" باشد
-            const type = document.getElementById('multiInventoryType').value;
-            if (type === 'in' && totalAmount > 0) {
-                const totalDiv = document.createElement('div');
-                totalDiv.style.marginTop = '10px';
-                totalDiv.style.padding = '10px';
-                totalDiv.style.background = '#E8F5E9';
-                totalDiv.style.borderRadius = '8px';
-                totalDiv.style.textAlign = 'center';
-                totalDiv.style.fontWeight = 'bold';
-                totalDiv.innerHTML = `💰 جمع کل: ${formatNumber(totalAmount)} ریال`;
-                container.appendChild(totalDiv);
-            }
-        }
-
-        function removeMultiItem(index) {
-            multiSelectedItems.splice(index, 1);
-            updateMultiItemsDisplay();
-            
-            if (multiSelectedItems.length === 0) {
-                document.getElementById('multiSelectedItemsContainer').style.display = 'none';
-            }
-        }
-
-        function clearAllSelectedItems() {
-            if (multiSelectedItems.length > 0) {
-                if (confirm('آیا از حذف همه کالاهای انتخاب شده اطمینان دارید؟')) {
-                    multiSelectedItems = [];
-                    document.getElementById('multiSelectedItemsContainer').style.display = 'none';
-                    document.getElementById('multiItemSearch').value = '';
-                    document.getElementById('multiItemForm').classList.remove('active');
-                    currentMultiItem = null;
-                }
-            }
         }
 
         function loadEmployeesSelect() {
@@ -1112,6 +1010,109 @@
             });
         }
 
+        // ========== توابع حالت چند کالایی ==========
+        function addToMultiItemsList() {
+            if (!currentMultiItem) {
+                showAlert('خطا', 'لطفاً یک کالا انتخاب کنید');
+                return;
+            }
+            
+            const quantity = document.getElementById('multiQuantity').value;
+            const price = document.getElementById('multiPrice').value;
+            const type = document.getElementById('multiInventoryType').value;
+            
+            if (!quantity || quantity <= 0) {
+                showAlert('خطا', 'لطفاً مقدار را وارد کنید');
+                return;
+            }
+            
+            if (type === 'in' && (!price || price <= 0)) {
+                showAlert('خطا', 'لطفاً قیمت واحد را وارد کنید');
+                return;
+            }
+            
+            const newItem = {
+                id: currentMultiItem.id,
+                name: currentMultiItem.name,
+                unit: currentMultiItem.unit,
+                quantity: quantity,
+                price: type === 'in' ? price : 0,
+                total: type === 'in' ? quantity * price : 0
+            };
+            
+            multiSelectedItems.push(newItem);
+            updateMultiItemsDisplay();
+            
+            document.getElementById('multiQuantity').value = '';
+            document.getElementById('multiPrice').value = '';
+            document.getElementById('multiItemSearch').value = '';
+            document.getElementById('multiItemForm').classList.remove('active');
+            currentMultiItem = null;
+            document.getElementById('multiSelectedItemsContainer').style.display = 'block';
+        }
+
+        function updateMultiItemsDisplay() {
+            const container = document.getElementById('selectedItemsList');
+            container.innerHTML = '';
+            
+            let totalAmount = 0;
+            
+            multiSelectedItems.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'selected-item';
+                
+                const total = item.quantity * (item.price || 0);
+                totalAmount += total;
+                
+                itemDiv.innerHTML = `
+                    <div class="item-details">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-quantity">مقدار: ${item.quantity} ${item.unit}</div>
+                        ${item.price > 0 ? `<div class="item-price">قیمت: ${formatNumber(item.price)} ریال (جمع: ${formatNumber(total)} ریال)</div>` : ''}
+                    </div>
+                    <div class="remove-item" onclick="removeMultiItem(${index})">×</div>
+                `;
+                
+                container.appendChild(itemDiv);
+            });
+            
+            document.getElementById('selectedItemsCount').textContent = multiSelectedItems.length;
+            
+            const type = document.getElementById('multiInventoryType').value;
+            if (type === 'in' && totalAmount > 0) {
+                const totalDiv = document.createElement('div');
+                totalDiv.style.marginTop = '10px';
+                totalDiv.style.padding = '10px';
+                totalDiv.style.background = '#E8F5E9';
+                totalDiv.style.borderRadius = '8px';
+                totalDiv.style.textAlign = 'center';
+                totalDiv.style.fontWeight = 'bold';
+                totalDiv.innerHTML = `💰 جمع کل: ${formatNumber(totalAmount)} ریال`;
+                container.appendChild(totalDiv);
+            }
+        }
+
+        function removeMultiItem(index) {
+            multiSelectedItems.splice(index, 1);
+            updateMultiItemsDisplay();
+            
+            if (multiSelectedItems.length === 0) {
+                document.getElementById('multiSelectedItemsContainer').style.display = 'none';
+            }
+        }
+
+        function clearAllSelectedItems() {
+            if (multiSelectedItems.length > 0) {
+                if (confirm('آیا از حذف همه کالاهای انتخاب شده اطمینان دارید؟')) {
+                    multiSelectedItems = [];
+                    document.getElementById('multiSelectedItemsContainer').style.display = 'none';
+                    document.getElementById('multiItemSearch').value = '';
+                    document.getElementById('multiItemForm').classList.remove('active');
+                    currentMultiItem = null;
+                }
+            }
+        }
+
         function updateCustomerBalance() {
             const customerId = parseInt(document.getElementById('customerSelect').value);
             if (!customerId) return;
@@ -1123,6 +1124,7 @@
             }
         }
 
+        // ========== توابع ایجاد کارت‌ها ==========
         function createSingleInventoryCard() {
             const type = document.getElementById('inventoryType').value;
             const quantity = document.getElementById('quantity').value;
@@ -1243,7 +1245,6 @@
             document.getElementById('inventoryPreview').textContent = message;
             document.getElementById('inventoryPreview').style.display = 'block';
             
-            // ذخیره تراکنش
             transactions.push({
                 id: uniqueId,
                 type: 'inventory',
@@ -1260,7 +1261,6 @@
             document.getElementById('confirmModal').classList.add('active');
             currentMessage = message;
             
-            // ریست کردن فرم
             multiSelectedItems = [];
             document.getElementById('multiSelectedItemsContainer').style.display = 'none';
             document.getElementById('multiItemSearch').value = '';
@@ -1662,6 +1662,7 @@
             closeModal();
         }
 
+        // ========== توابع مدیریت (افزودن، ویرایش، حذف) ==========
         function refreshItemsList() {
             const listDiv = document.getElementById('itemsList');
             listDiv.innerHTML = '';
@@ -1934,6 +1935,7 @@
             showAlert('موفقیت', 'مشتری با موفقیت حذف شد');
         }
 
+        // ========== تابع مقداردهی اولیه ==========
         function init() {
             const today = new Date().toLocaleDateString('fa-IR', {
                 year: 'numeric',
@@ -2037,7 +2039,6 @@
                     priceInput.disabled = false;
                 }
                 
-                // به روز رسانی نمایش لیست
                 updateMultiItemsDisplay();
             });
             
@@ -2076,21 +2077,20 @@
                 }
             });
             
-            console.log('سیستم رستوران شقایق بارگذاری شد.');
+            console.log('سیستم رستوران شقایق بارگذاری شد. تعداد کالاها:', items.length);
         }
+        
         window.onload = init;
     </script>
 
     <!-- Service Worker Registration -->
     <script>
-        // ثبت Service Worker برای PWA
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
                 navigator.serviceWorker.register('sw.js')
                     .then(function(registration) {
                         console.log('✅ Service Worker ثبت شد:', registration.scope);
                         
-                        // بررسی آپدیت
                         registration.addEventListener('updatefound', () => {
                             console.log('🔄 نسخه جدید Service Worker پیدا شد');
                         });
@@ -2100,7 +2100,6 @@
                     });
             });
             
-            // کنترل وضعیت آفلاین
             window.addEventListener('online', function() {
                 console.log('🌐 آنلاین شدید');
                 showAlert('اتصال اینترنت', 'شما آنلاین هستید');
