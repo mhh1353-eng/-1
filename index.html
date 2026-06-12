@@ -680,135 +680,33 @@
     </div>
 
     <script>
-        // ========== لیست کالاها - یکپارچه و بدون تکرار ==========
-        const items = [
-            {id: 1, name: "ظرف تک پرسی آلومینیومی", unit: "عدد"},
-            {id: 2, name: "ظرف کبابی دوخانه", unit: "عدد"},
-            {id: 3, name: "ظرف کبابی آلومینیومی", unit: "عدد"},
-            {id: 4, name: "ظرف سه پرسی آلومینیومی", unit: "عدد"},
-            {id: 5, name: "ظرف زیتون کارتن 240 تایی", unit: "عدد"},
-            {id: 6, name: "دیس کبابی چینی", unit: "عدد"},
-            {id: 7, name: "بشقاب برنج", unit: "عدد"},
-            {id: 8, name: "شکر", unit: "بسته"},
-            {id: 9, name: "ظرف گود اکبر جوجه", unit: "عدد"},
-            {id: 10, name: "ظرف پنیر گردو", unit: "عدد"},
-            {id: 11, name: "کاسه سوپ", unit: "عدد"},
-            {id: 12, name: "کتری", unit: "عدد"},
-            {id: 13, name: "لیوان چای", unit: "عدد"},
-            {id: 14, name: "بشقاب املت", unit: "عدد"},
-            {id: 15, name: "قند کارتنی 3 کیلو کاترین", unit: "کارتن"},
-            {id: 16, name: "سس فرانسوی تک", unit: "عدد"},
-            {id: 17, name: "رب انار تک نفره", unit: "عدد"},
-            {id: 18, name: "سس دبه ۱۰ کیلویی", unit: "دبه"},
-            {id: 19, name: "سس گلوریا", unit: "عدد"},
-            {id: 20, name: "نمک پاش", unit: "عدد"},
-            {id: 21, name: "مایع دودی", unit: "عدد"},
-            {id: 22, name: "سس شکلات", unit: "عدد"},
-            {id: 23, name: "نمک", unit: "بسته"},
-            {id: 24, name: "رب املت", unit: "عدد"},
-            {id: 25, name: "رب محلی", unit: "دبه"},
-            {id: 26, name: "آبلیمو 1.5 لیتری", unit: "عدد"},
-            {id: 27, name: "آبلیمو 1.250 لیتری", unit: "عدد"},
-            {id: 28, name: "آب نارنج 1.5 لیتری", unit: "عدد"},
-            {id: 29, name: "سرکه دست چین ۴ لیتری", unit: "عدد"},
-            {id: 30, name: "کیسه فریزر رولی", unit: "عدد"},
-            {id: 31, name: "کیسه فریزر بسته‌بندی", unit: "عدد"},
-            {id: 32, name: "روغن لادن ۱۶ کیلویی", unit: "عدد"},
-            {id: 33, name: "مایع دستشویی", unit: "عدد"},
-            {id: 34, name: "مایع ظرفشویی 20 لیتری", unit: "عدد"},
-            {id: 35, name: "لیوان کاغذی", unit: "عدد"},
-            {id: 36, name: "لیوان کاغذی کافه", unit: "عدد"},
-            {id: 37, name: "لیوان پلاستیکی", unit: "عدد"},
-            {id: 38, name: "چاقو یکبار مصرف", unit: "عدد"},
-            {id: 39, name: "چنگال یکبار مصرف", unit: "عدد"},
-            {id: 40, name: "چاقو ام جی پلاست", unit: "عدد"},
-            {id: 41, name: "قاشق کوچک", unit: "عدد"},
-            {id: 42, name: "سفره", unit: "عدد"},
-            {id: 43, name: "برنج خاطره کیسه 40 کیلویی", unit: "کیسه"},
-            {id: 44, name: "عدس ۲۵ کیلویی", unit: "کیلو"},
-            {id: 45, name: "عدس ۵۰ کیلویی", unit: "کیلو"},
-            {id: 46, name: "جو پوست کنده", unit: "کیلو"},
-            {id: 47, name: "لوبیا چیتی", unit: "کیلو"},
-            {id: 48, name: "لپه", unit: "کیلو"},
-            {id: 49, name: "لوبیا قرمز", unit: "کیلو"},
-            {id: 50, name: "چای دو غزال", unit: "بسته"},
-            {id: 51, name: "آلو بخارا", unit: "بسته"},
-            {id: 52, name: "وایتکس ۴ لیتری", unit: "عدد"},
-            {id: 53, name: "رب انار", unit: "عدد"},
-            {id: 54, name: "خیارشور دبه‌ای", unit: "دبه"},
-            {id: 55, name: "پلاستیک رستوران", unit: "عدد"},
-            {id: 56, name: "رول دستگاه شیرینگ", unit: "عدد"},
-            {id: 57, name: "ماست دبه ۱۰ کیلویی", unit: "دبه"},
-            {id: 58, name: "شیر", unit: "کیلو"},
-            {id: 59, name: "ماست موسیر ۱۰۰ گرمی", unit: "عدد"},
-            {id: 60, name: "سبزی پلویی", unit: "کیلو"},
-            {id: 61, name: "فلفل سیاه کیسه‌ای", unit: "کیلو"},
-            {id: 62, name: "زردچوبه کیسه‌ای", unit: "کیلو"},
-            {id: 63, name: "سبزی دلال", unit: "کیلو"},
-            {id: 64, name: "دستمال ساده رومیزی", unit: "عدد"},
-            {id: 65, name: "دستمال ضخیم توالت", unit: "عدد"},
-            {id: 66, name: "نوشابه قوطی", unit: "عدد"},
-            {id: 67, name: "نوشابه بطری زرد", unit: "عدد"},
-            {id: 68, name: "شیشه شور", unit: "عدد"},
-            {id: 69, name: "آب معدنی پک 12 تایی", unit: "پک"},
-            {id: 70, name: "ترشی هالوپینو", unit: "عدد"},
-            {id: 71, name: "روغن ۵ کیلویی", unit: "عدد"},
-            {id: 72, name: "ترشی", unit: "کیلو"},
-            {id: 73, name: "پیاز ریز", unit: "کیلو"},
-            {id: 74, name: "پیاز درشت", unit: "کیلو"},
-            {id: 75, name: "گوجه", unit: "کیلو"},
-            {id: 76, name: "لیمو عمانی", unit: "کیلو"},
-            {id: 77, name: "کلم قرمز", unit: "کیلو"},
-            {id: 78, name: "اکبر جوجه", unit: "کیلو"},
-            {id: 79, name: "فیله بره", unit: "کیلو"},
-            {id: 80, name: "شنیسل سینه", unit: "کیلو"},
-            {id: 81, name: "شنیسل ران", unit: "کیلو"},
-            {id: 82, name: "فیله مرغ", unit: "کیلو"},
-            {id: 83, name: "نخودی 7 کیلویی", unit: "کیلو"},
-            {id: 84, name: "قلوه‌گاه بره 5 کیلویی", unit: "کیلو"},
-            {id: 85, name: "کره کنار برنج", unit: "عدد"},
-            {id: 86, name: "کره حیوانی 10 کیلویی", unit: "کیلو"},
-            {id: 87, name: "برگی 3 کیلویی", unit: "کیلو"},
-            {id: 88, name: "شیشلیک آمل", unit: "کیلو"},
-            {id: 89, name: "شیشلیک مشهد 5 کیلویی", unit: "کیلو"},
-            {id: 90, name: "ماهیچه بره", unit: "کیلو"},
-            {id: 91, name: "گردن بره", unit: "کیلو"},
-            {id: 92, name: "سبزی شکم پر", unit: "بسته"},
-            {id: 93, name: "زرشک 10 کیلو", unit: "کیلو"},
-            {id: 94, name: "گردو خورشتی 5 کیلو", unit: "کیلو"},
-            {id: 95, name: "ماهی قزل آلا", unit: "کیلو"},
-            {id: 96, name: "برنج طارم", unit: "کیلو"},
-            {id: 97, name: "گردو صبحانه 5 کیلو", unit: "کیلو"},
-            {id: 98, name: "سبزی قرمه", unit: "کیلو"},
-            {id: 99, name: "اناردون", unit: "کیلو"},
-            {id: 100, name: "نبات کارتن 5 کیلویی", unit: "کیلو"},
-            {id: 101, name: "نوشابه خانواده", unit: "عدد"},
-            {id: 102, name: "قند کارتنی 10 کیلویی", unit: "کارتن"},
-            {id: 103, name: "دلستر جوجو قوطی", unit: "عدد"},
-            {id: 104, name: "کارتن بیرون بر", unit: "عدد"},
-            {id: 105, name: "وایتکس 20 لیتری", unit: "دبه"},
-            {id: 106, name: "کیسه زباله 25 کیلویی", unit: "کیلو"},
-            {id: 107, name: "دستکش رز مریم", unit: "عدد"},
-            {id: 108, name: "قاشق بزرگ یکبار مصرف", unit: "عدد"},
-            {id: 109, name: "سیب زمینی", unit: "کیلو"},
-            {id: 110, name: "مایع ظرفشویی ۱۸ لیتری ونوشه", unit: "عدد"},
-            {id: 111, name: "مایع دستشویی طرح ونوش ۲۰ لیتری", unit: "عدد"},
-            {id: 112, name: "مایع سفید کننده ۴ لیتری رایش", unit: "عدد"},
-            {id: 113, name: "جرم‌گیر ۴ لیتری راش", unit: "عدد"},
-            {id: 114, name: "روغن مایع 1.5 لیتری لادن", unit: "عدد"},
-            {id: 115, name: "دستمال فله", unit: "عدد"},
-            {id: 116, name: "دستمال مخزنی", unit: "عدد"},
-            {id: 117, name: "روغن مایع", unit: "عدد"},
-            {id: 118, name: "نارنج", unit: "کیلو"},
-            {id: 119, name: "سرکه قزوین 9.5 لیتری", unit: "عدد"},
-            {id: 120, name: "جرمگیر", unit: "کارتن"},
-            {id: 121, name: "پلاستیک چاپی رستوران", unit: "بسته"},
-            {id: 122, name: "کتف و بال", unit: "کیلو"},
-            {id: 123, name: "ران مرغ", unit: "کیلو"},
-            {id: 124, name: "طرح حیوانی", unit: "کیلو"},
-            {id: 125, name: "برگر", unit: "کیلو"},
-            {id: 126, name: "خیارشور", unit: "کیلو"}
-        ];
+
+// ========== لیست کالاها - بارگذاری از فایل JSON ==========
+let items = [];
+
+// تابع بارگذاری کالاها از فایل JSON
+async function loadItemsFromFile() {
+    try {
+        const response = await fetch('items.json?v=' + Date.now());
+        if (response.ok) {
+            const data = await response.json();
+            if (data.items && data.items.length > 0) {
+                items = data.items;
+                console.log('✅ کالاها بارگذاری شدند. تعداد:', items.length);
+                return true;
+            }
+        }
+    } catch (error) {
+        console.error('❌ خطا در بارگذاری کالاها:', error);
+    }
+    
+    // اگر فایل نبود، از داده‌های پیش‌فرض استفاده کن
+    items = [
+        {id: 1, name: "ظرف تک پرسی آلومینیومی", unit: "عدد"},
+        {id: 2, name: "ظرف کبابی دوخانه", unit: "عدد"}
+    ];
+    return false;
+}
 
         // ========== متغیرهای سراسری ==========
         let employees = [];
@@ -1935,150 +1833,154 @@
             showAlert('موفقیت', 'مشتری با موفقیت حذف شد');
         }
 
-        // ========== تابع مقداردهی اولیه ==========
-        function init() {
-            const today = new Date().toLocaleDateString('fa-IR', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
-            document.getElementById('currentDate').textContent = today;
+       // ========== تابع مقداردهی اولیه ==========
+function init() {
+    const today = new Date().toLocaleDateString('fa-IR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+    document.getElementById('currentDate').textContent = today;
+    
+    // اول از همه، کالاها رو از فایل JSON بارگذاری کن
+    loadItemsFromFile().then(() => {
+        // بعد از بارگذاری فایل، همه لیست‌ها رو نمایش بده
+        loadItemsList();
+        loadMultiItemsList();
+        loadEmployeesSelect();
+        loadCustomersSelect();
+        loadCustomerItemsSelect();
+        
+        // event listener برای جستجوی کالا در حالت تک کالایی
+        document.getElementById('customerSelect').addEventListener('change', updateCustomerBalance);
+        
+        document.getElementById('itemSearch').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const itemListDiv = document.getElementById('itemList');
+            itemListDiv.style.display = 'block';
             
-            loadItemsList();
-            loadMultiItemsList();
-            loadEmployeesSelect();
-            loadCustomersSelect();
-            loadCustomerItemsSelect();
-            
-            document.getElementById('customerSelect').addEventListener('change', updateCustomerBalance);
-            
-            // event listener برای جستجوی کالا در حالت تک کالایی
-            document.getElementById('itemSearch').addEventListener('input', function(e) {
-                const searchTerm = e.target.value.toLowerCase();
-                const itemListDiv = document.getElementById('itemList');
-                itemListDiv.style.display = 'block';
-                
-                document.querySelectorAll('#itemList .item-option').forEach(option => {
-                    if (option.textContent.toLowerCase().includes(searchTerm)) {
-                        option.style.display = 'block';
-                    } else {
-                        option.style.display = 'none';
-                    }
-                });
-            });
-            
-            document.getElementById('itemSearch').addEventListener('click', function() {
-                const itemListDiv = document.getElementById('itemList');
-                itemListDiv.style.display = 'block';
-                
-                if (!selectedItem) {
-                    this.value = '';
-                }
-            });
-            
-            // event listener برای جستجوی کالا در حالت چند کالایی
-            document.getElementById('multiItemSearch').addEventListener('input', function(e) {
-                const searchTerm = e.target.value.toLowerCase();
-                const itemListDiv = document.getElementById('multiItemList');
-                itemListDiv.style.display = 'block';
-                
-                document.querySelectorAll('#multiItemList .item-option').forEach(option => {
-                    if (option.textContent.toLowerCase().includes(searchTerm)) {
-                        option.style.display = 'block';
-                    } else {
-                        option.style.display = 'none';
-                    }
-                });
-            });
-            
-            document.getElementById('multiItemSearch').addEventListener('click', function() {
-                const itemListDiv = document.getElementById('multiItemList');
-                itemListDiv.style.display = 'block';
-                
-                if (!currentMultiItem) {
-                    this.value = '';
-                }
-            });
-            
-            document.addEventListener('click', function(event) {
-                const itemListDiv = document.getElementById('itemList');
-                const searchInput = document.getElementById('itemSearch');
-                
-                if (!searchInput.contains(event.target) && !itemListDiv.contains(event.target)) {
-                    itemListDiv.style.display = 'none';
-                }
-                
-                const multiItemListDiv = document.getElementById('multiItemList');
-                const multiSearchInput = document.getElementById('multiItemSearch');
-                
-                if (!multiSearchInput.contains(event.target) && !multiItemListDiv.contains(event.target)) {
-                    multiItemListDiv.style.display = 'none';
-                }
-            });
-            
-            document.getElementById('inventoryType').addEventListener('change', function() {
-                const priceInput = document.getElementById('price');
-                if (this.value === 'out') {
-                    priceInput.placeholder = 'برای خروج نیاز نیست';
-                    priceInput.disabled = true;
-                    priceInput.value = '';
+            document.querySelectorAll('#itemList .item-option').forEach(option => {
+                if (option.textContent.toLowerCase().includes(searchTerm)) {
+                    option.style.display = 'block';
                 } else {
-                    priceInput.placeholder = 'قیمت واحد را وارد کنید';
-                    priceInput.disabled = false;
+                    option.style.display = 'none';
                 }
             });
+        });
+        
+        document.getElementById('itemSearch').addEventListener('click', function() {
+            const itemListDiv = document.getElementById('itemList');
+            itemListDiv.style.display = 'block';
             
-            document.getElementById('multiInventoryType').addEventListener('change', function() {
-                const priceInput = document.getElementById('multiPrice');
-                if (this.value === 'out') {
-                    priceInput.placeholder = 'برای خروج نیاز نیست';
-                    priceInput.disabled = true;
-                    priceInput.value = '';
+            if (!selectedItem) {
+                this.value = '';
+            }
+        });
+        
+        // event listener برای جستجوی کالا در حالت چند کالایی
+        document.getElementById('multiItemSearch').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const itemListDiv = document.getElementById('multiItemList');
+            itemListDiv.style.display = 'block';
+            
+            document.querySelectorAll('#multiItemList .item-option').forEach(option => {
+                if (option.textContent.toLowerCase().includes(searchTerm)) {
+                    option.style.display = 'block';
                 } else {
-                    priceInput.placeholder = 'قیمت واحد را وارد کنید';
-                    priceInput.disabled = false;
-                }
-                
-                updateMultiItemsDisplay();
-            });
-            
-            document.getElementById('paymentType').addEventListener('change', function() {
-                const periodInput = document.getElementById('period');
-                if (this.value !== 'salary') {
-                    periodInput.placeholder = 'برای این نوع نیاز نیست';
-                    periodInput.disabled = true;
-                    periodInput.value = '';
-                } else {
-                    periodInput.placeholder = 'مثال: مهر ۱۴۰۳';
-                    periodInput.disabled = false;
+                    option.style.display = 'none';
                 }
             });
+        });
+        
+        document.getElementById('multiItemSearch').addEventListener('click', function() {
+            const itemListDiv = document.getElementById('multiItemList');
+            itemListDiv.style.display = 'block';
             
-            document.getElementById('customerTransactionType').addEventListener('change', function() {
-                const itemSelect = document.getElementById('customerItemSelect');
-                const quantityInput = document.getElementById('customerQuantity');
-                const priceInput = document.getElementById('customerPrice');
-                const cashAmountInput = document.getElementById('customerCashAmount');
-                
-                if (this.value === 'buy' || this.value === 'sell') {
-                    itemSelect.disabled = false;
-                    quantityInput.disabled = false;
-                    priceInput.disabled = false;
-                    cashAmountInput.disabled = true;
-                    cashAmountInput.value = '';
-                } else {
-                    itemSelect.disabled = true;
-                    quantityInput.disabled = true;
-                    priceInput.disabled = true;
-                    cashAmountInput.disabled = false;
-                    itemSelect.value = '';
-                    quantityInput.value = '';
-                    priceInput.value = '';
-                }
-            });
+            if (!currentMultiItem) {
+                this.value = '';
+            }
+        });
+        
+        document.addEventListener('click', function(event) {
+            const itemListDiv = document.getElementById('itemList');
+            const searchInput = document.getElementById('itemSearch');
             
-            console.log('سیستم رستوران شقایق بارگذاری شد. تعداد کالاها:', items.length);
-        }
+            if (!searchInput.contains(event.target) && !itemListDiv.contains(event.target)) {
+                itemListDiv.style.display = 'none';
+            }
+            
+            const multiItemListDiv = document.getElementById('multiItemList');
+            const multiSearchInput = document.getElementById('multiItemSearch');
+            
+            if (!multiSearchInput.contains(event.target) && !multiItemListDiv.contains(event.target)) {
+                multiItemListDiv.style.display = 'none';
+            }
+        });
+        
+        document.getElementById('inventoryType').addEventListener('change', function() {
+            const priceInput = document.getElementById('price');
+            if (this.value === 'out') {
+                priceInput.placeholder = 'برای خروج نیاز نیست';
+                priceInput.disabled = true;
+                priceInput.value = '';
+            } else {
+                priceInput.placeholder = 'قیمت واحد را وارد کنید';
+                priceInput.disabled = false;
+            }
+        });
+        
+        document.getElementById('multiInventoryType').addEventListener('change', function() {
+            const priceInput = document.getElementById('multiPrice');
+            if (this.value === 'out') {
+                priceInput.placeholder = 'برای خروج نیاز نیست';
+                priceInput.disabled = true;
+                priceInput.value = '';
+            } else {
+                priceInput.placeholder = 'قیمت واحد را وارد کنید';
+                priceInput.disabled = false;
+            }
+            
+            updateMultiItemsDisplay();
+        });
+        
+        document.getElementById('paymentType').addEventListener('change', function() {
+            const periodInput = document.getElementById('period');
+            if (this.value !== 'salary') {
+                periodInput.placeholder = 'برای این نوع نیاز نیست';
+                periodInput.disabled = true;
+                periodInput.value = '';
+            } else {
+                periodInput.placeholder = 'مثال: مهر ۱۴۰۳';
+                periodInput.disabled = false;
+            }
+        });
+        
+        document.getElementById('customerTransactionType').addEventListener('change', function() {
+            const itemSelect = document.getElementById('customerItemSelect');
+            const quantityInput = document.getElementById('customerQuantity');
+            const priceInput = document.getElementById('customerPrice');
+            const cashAmountInput = document.getElementById('customerCashAmount');
+            
+            if (this.value === 'buy' || this.value === 'sell') {
+                itemSelect.disabled = false;
+                quantityInput.disabled = false;
+                priceInput.disabled = false;
+                cashAmountInput.disabled = true;
+                cashAmountInput.value = '';
+            } else {
+                itemSelect.disabled = true;
+                quantityInput.disabled = true;
+                priceInput.disabled = true;
+                cashAmountInput.disabled = false;
+                itemSelect.value = '';
+                quantityInput.value = '';
+                priceInput.value = '';
+            }
+        });
+        
+        console.log('سیستم رستوران شقایق بارگذاری شد. تعداد کالاها:', items.length);
+    });
+}
         
         window.onload = init;
     </script>
