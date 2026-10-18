@@ -622,7 +622,6 @@
                 <div class="list-actions">
                     <button class="btn btn-primary" onclick="addItem()">➕ افزودن</button>
                     <button class="btn btn-secondary" onclick="editItem()">✏️ ویرایش</button>
-                    <button class="btn btn-secondary" onclick="toggleItemActive()">🔄 فعال/غیرفعال کردن</button>
                     <button class="btn" onclick="deleteItem()" style="background: #F44336; color: white;">🗑️ حذف</button>
                 </div>
                 <div class="item-list" id="itemsList" style="margin-top: 10px;"></div>
@@ -684,24 +683,6 @@
 
 // ========== لیست کالاها - بارگذاری از فایل JSON ==========
 let items = [];
-const ITEM_STATUS_STORAGE_KEY = 'shaghayegh_item_status_v1';
-
-function readItemStatusOverrides() {
-    try { return JSON.parse(localStorage.getItem(ITEM_STATUS_STORAGE_KEY) || '{}'); }
-    catch (error) { console.warn('وضعیت کالاها خوانده نشد:', error); return {}; }
-}
-function saveItemStatusOverrides(statuses) {
-    try { localStorage.setItem(ITEM_STATUS_STORAGE_KEY, JSON.stringify(statuses)); return true; }
-    catch (error) { showAlert('خطا', 'ذخیره وضعیت کالا ممکن نشد. فضای ذخیره‌سازی مرورگر را بررسی کنید.'); return false; }
-}
-function applySavedItemStatuses() {
-    const statuses = readItemStatusOverrides();
-    items.forEach(item => {
-        if (Object.prototype.hasOwnProperty.call(statuses, String(item.id))) item.active = statuses[String(item.id)];
-        else if (typeof item.active !== 'boolean') item.active = true;
-    });
-}
-function activeItems() { return items.filter(item => item.active !== false); }
 
 // تابع بارگذاری کالاها از فایل JSON
 async function loadItemsFromFile() {
@@ -711,7 +692,6 @@ async function loadItemsFromFile() {
             const data = await response.json();
             if (data.items && data.items.length > 0) {
                 items = data.items;
-                applySavedItemStatuses();
                 console.log('✅ کالاها بارگذاری شدند. تعداد:', items.length);
                 return true;
             }
@@ -725,7 +705,6 @@ async function loadItemsFromFile() {
         {id: 1, name: "ظرف تک پرسی آلومینیومی", unit: "عدد"},
         {id: 2, name: "ظرف کبابی دوخانه", unit: "عدد"}
     ];
-    applySavedItemStatuses();
     return false;
 }
 
@@ -835,7 +814,7 @@ async function loadItemsFromFile() {
             const itemListDiv = document.getElementById('itemList');
             itemListDiv.innerHTML = '';
             
-            activeItems().forEach(item => {
+            items.forEach(item => {
                 const div = document.createElement('div');
                 div.className = 'item-option';
                 div.textContent = `${item.name} (${item.unit})`;
@@ -861,7 +840,7 @@ async function loadItemsFromFile() {
             const itemListDiv = document.getElementById('multiItemList');
             itemListDiv.innerHTML = '';
             
-            activeItems().forEach(item => {
+            items.forEach(item => {
                 const div = document.createElement('div');
                 div.className = 'item-option';
                 div.textContent = `${item.name} (${item.unit})`;
@@ -921,7 +900,7 @@ async function loadItemsFromFile() {
         function loadCustomerItemsSelect() {
             const select = document.getElementById('customerItemSelect');
             select.innerHTML = '<option value="">-- انتخاب کالا --</option>';
-            activeItems().forEach(item => {
+            items.forEach(item => {
                 const option = document.createElement('option');
                 option.value = item.id;
                 option.textContent = `${item.name} (${item.unit})`;
@@ -1588,8 +1567,7 @@ async function loadItemsFromFile() {
             items.forEach(item => {
                 const div = document.createElement('div');
                 div.className = 'item-option';
-                div.style.opacity = item.active === false ? '0.65' : '1';
-                div.textContent = `${item.active === false ? '⛔ غیرفعال — ' : '✅ فعال — '}${item.name} (${item.unit})`;
+                div.textContent = `${item.name} (${item.unit})`;
                 div.onclick = () => {
                     document.getElementById('newItemName').value = item.name;
                     document.getElementById('newItemUnit').value = item.unit;
@@ -1644,7 +1622,7 @@ async function loadItemsFromFile() {
             }
             
             const newId = Math.max(...items.map(i => i.id)) + 1;
-            items.push({id: newId, name: name, unit: unit, active: true});
+            items.push({id: newId, name: name, unit: unit});
             
             document.getElementById('newItemName').value = '';
             document.getElementById('newItemUnit').value = '';
@@ -1691,40 +1669,6 @@ async function loadItemsFromFile() {
             loadMultiItemsList();
             loadCustomerItemsSelect();
             showAlert('موفقیت', 'کالا با موفقیت ویرایش شد');
-        }
-
-        function toggleItemActive() {
-            if (selectedItemId === null || selectedItemId === undefined) {
-                showAlert('خطا', 'لطفاً ابتدا کالا را از فهرست مدیریت کالاها انتخاب کنید');
-                return;
-            }
-            const item = items.find(i => String(i.id) === String(selectedItemId));
-            if (!item) {
-                showAlert('خطا', 'کالای انتخاب‌شده پیدا نشد');
-                return;
-            }
-            const nextActive = item.active === false;
-            const action = nextActive ? 'فعال' : 'غیرفعال';
-            if (!confirm(`کالای «${item.name}» ${action} شود؟
-سوابق قبلی کالا حذف نمی‌شود.`)) return;
-            const statuses = readItemStatusOverrides();
-            statuses[String(item.id)] = nextActive;
-            if (!saveItemStatusOverrides(statuses)) return;
-            item.active = nextActive;
-            refreshItemsList();
-            loadItemsList();
-            loadMultiItemsList();
-            loadCustomerItemsSelect();
-            if (selectedItem && String(selectedItem.id) === String(item.id) && !nextActive) {
-                selectedItem = null; selectedItemId = null;
-                document.getElementById('itemSearch').value = '';
-            }
-            if (currentMultiItem && String(currentMultiItem.id) === String(item.id) && !nextActive) {
-                currentMultiItem = null;
-                document.getElementById('multiItemSearch').value = '';
-                document.getElementById('multiItemForm').classList.remove('active');
-            }
-            showAlert('موفقیت', `کالای «${item.name}» ${action} شد. سوابق قبلی حفظ شده‌اند.`);
         }
 
         function deleteItem() {
